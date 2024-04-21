@@ -1,19 +1,19 @@
-CREATE TABLE users (
+CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    email VARCHAR(100),
-    password VARCHAR(100),
-    unique_id VARCHAR(100)
+    nombre VARCHAR(100),
+    correo_electronico VARCHAR(100),
+    contraseña VARCHAR(100),
+    id_unico VARCHAR(100)
 );
 
-CREATE TABLE vital_signs (
+CREATE TABLE signos_vitales (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    pulse_rate INT,
-    oxygen_level INT,
-    temperature FLOAT,
-    accelerometer_data VARCHAR(100),
-    gyroscope_data VARCHAR(100),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    usuario_id INT,
+    frecuencia_cardiaca INT,
+    nivel_oxigeno INT,
+    temperatura FLOAT,
+    datos_acelerometro VARCHAR(100),
+    datos_giroscopio VARCHAR(100),
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
