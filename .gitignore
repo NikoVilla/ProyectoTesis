@@ -1,1 +1,9 @@
 .env
+__pycache__
+data.db
+.buildozer
+buildozer.spec
+bin
+app.spec
+build
+dist
