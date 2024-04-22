@@ -12,3 +12,7 @@ use Illuminate\Database\Eloquent\Model;
 class VitalSign extends Model {
     protected $fillable = ['user_id', 'pulse_rate', 'oxygen_level', 'temperature', 'accelerometer_data', 'gyroscope_data'];
 }
+
+class Element{
+    pass
+}
