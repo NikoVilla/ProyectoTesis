@@ -1,4 +1,4 @@
-from img import download_save_images
+#from img import download_save_images
 from database import Database
 from kivy.core.window import Window
 from kivy.utils import platform
@@ -132,6 +132,8 @@ class NewAccountScreen(MDScreen):
 class AppScreen(MDScreen):
 
     def log_out(self): # Método para cerrar sesión
+        self.manager.transition.direction = 'right'
+        self.manager.current = "login_screen"
 
 class MainApp(MDApp):
     dialog = None
@@ -186,5 +188,7 @@ class MainApp(MDApp):
         self.manager.current = 'new_account_screen'
         self.dialog.dismiss()
 
+    def get_screen_instance(self, screen):
+        return self.root.get_screen(screen)
 
 MainApp().run()
