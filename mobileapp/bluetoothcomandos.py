@@ -28,10 +28,10 @@ def receive_data():
     return data
 
 
-# # Archivo: main.py
+# Archivo: main.py
 # import bluetooth_comms
 
-# # Recibe datos a través de Bluetooth
+# Recibe datos a través de Bluetooth
 # data = bluetooth_comms.receive_data()
 
-# # Procesa los datos recibidos...
+# Procesa los datos recibidos...
