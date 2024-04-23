@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route; #(defecto)
-#use IlluminateSupportFacadesRoute; (ejemplo no funciona)
+#use IlluminateSupportFacadesRoute; #(ejemplo no funciona)
 
 Route::get('/', function () {
-  $name = "John Doe";
+  $name = "Nicolas Villanueva";
   return view('welcome', ['name' => $name]);
 });
