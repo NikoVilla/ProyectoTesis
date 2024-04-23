@@ -200,3 +200,31 @@ MainApp().run()
 #en el sw utilizar lara para crear una API REST que reciba los datos y los almacene en una base de datos MySQL. 
 #luego utilizar lara blade para crear la página web que muestre estos datos.
 
+
+# import bluetooth
+
+# # Función para recibir datos
+# def receive_data():
+#     # Crea un nuevo socket Bluetooth
+#     server_sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+
+#     # Asigna el socket al puerto 1
+#     port = 1
+#     server_sock.bind(("", port))
+#     # Escucha las conexiones entrantes
+#     server_sock.listen(1)
+
+#     # Acepta una conexión entrante
+#     client_sock, address = server_sock.accept()
+#     print(f"Accepted connection from {address}")
+
+#     # Recibe datos del cliente
+#     data = client_sock.recv(1024)
+#     print(f"Received: {data}")
+
+#     # Cierra los sockets del cliente y del servidor
+#     client_sock.close()
+#     server_sock.close()
+
+#     # Devuelve los datos recibidos
+#     return data
