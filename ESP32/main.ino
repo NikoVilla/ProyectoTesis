@@ -2,13 +2,13 @@
 #include "OximetroSensor.h"
 #include "TemperaturaSensor.h"
 #include "GiroscopioSensor.h"
-#include "BluetoothComms.h"
+#include "BluetoothCom.h"
 
 PulsoSensor pulso;
 OximetroSensor oximetro;
 TemperaturaSensor temperatura;
 GiroscopioSensor giroscopio;
-BluetoothComms bluetooth;
+BluetoothCom bluetooth;
 
 void setup() {
   pulso.begin();
