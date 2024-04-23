@@ -192,3 +192,11 @@ class MainApp(MDApp):
         return self.root.get_screen(screen)
 
 MainApp().run()
+
+#pybluez para recibir datos desde esp32
+#matplotlib para hacer graficos
+#sqlite3 para la db local
+#request para para enviar los datos a un API REST en el sw
+#en el sw utilizar lara para crear una API REST que reciba los datos y los almacene en una base de datos MySQL. 
+#luego utilizar lara blade para crear la página web que muestre estos datos.
+
