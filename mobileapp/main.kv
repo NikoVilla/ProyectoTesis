@@ -1,3 +1,48 @@
+# Pantalla Inicial
+<PrevScreen>:
+    FloatLayout:
+        Image:
+            source: 'logo.png' 
+            size_hint: None, None
+            size: "230dp", "174.95dp"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.65}
+
+        Label:
+            text: "CUIDATEST"
+            #halign: "center"
+            font_size: "40sp"
+            font_name: "RobotoCondensed-Bold.ttf"
+            bold: True
+            color: [0.949, 0.949, 0.949, 1]  # Color F2F2F2 en formato RGBA
+            pos_hint: {'center_x': 0.5, 'center_y': 0.45}
+        
+            
+        MDRectangleFlatButton:
+            text: "Ingresar"
+            size_hint: None, None
+            _min_width: 184
+            _min_height: 57
+            pos_hint: {'x': 0.39, 'y': 0.05}
+            font_name: 'Iceberg-Regular.ttf'
+            font_size: "22sp"
+            text_color: [1, 1, 1, 1] 
+            border: (1.5, 1.5, 1.5, 1.5) 
+            md_bg_color: 18/255, 18/255, 18/255, 1 
+            on_release: root.show_login_screen()
+
+
+        MDRaisedButton:
+            text: "Registrarse"
+            size_hint: None, None
+            _min_width: 177
+            _min_height: 57
+            pos_hint: {'x': 0.51, 'y': 0.05}
+            md_bg_color: 217/255, 43/255, 4/255, 1 # Color fondo boton 
+            font_name: 'Iceberg-Regular.ttf' 
+            font_size: "22sp" 
+            text_color: [0.05, 0.05, 0.05, 1]  # Color de letra 
+            on_release: root.show_new_account_screen()
+
 <LoginScreen>:
 
     MDBoxLayout:
@@ -77,6 +122,7 @@
         
         MDWidget:
             size_hint_y: 0.2
+
 
 <NewAccountScreen>:
     MDBoxLayout:
