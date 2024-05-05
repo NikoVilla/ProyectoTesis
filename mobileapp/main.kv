@@ -1,141 +1,157 @@
-# Pantalla Inicial
-<PrevScreen>:
-    FloatLayout:
-        Image:
-            source: 'X10.png' 
-            size_hint: None, None
-            size: "230dp", "174.95dp"
-            keep_ratio: True 
-            allow_stretch: True
-            pos_hint: {'center_x': 0.5, 'center_y': 0.67}
-
-        Label:
-            text: "CUIDATEST"
-            halign: "center"
-            font_size: "40sp"
-            font_name: "RobotoCondensed-Bold.ttf"
-            bold: True
-            color: [0.949, 0.949, 0.949, 1]  # Color F2F2F2 
-            pos_hint: {'center_x': 0.5, 'center_y': 0.42}
-        
-            
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 1, 0.07  # Tamaño BoxLayout
-            pos_hint: {'center_x': 0.5, 'center_y': 0.07} 
-
-            Widget:
-                size_hint: 0.1, 1  # Margen izquierdo
-
-            MDRectangleFlatButton:
-                text: "Ingresar"
-                size_hint: 0.35, 1 
-                font_name: 'Iceberg-Regular.ttf'
-                font_size: "22sp"
-                text_color: [1, 1, 1, 1] 
-                border: (1.5, 1.5, 1.5, 1.5) 
-                md_bg_color: 18/255, 18/255, 18/255, 1 
-                on_release: root.show_login_screen()
-
-            Widget:
-                size_hint: 0.095, 1  # Separación en medio
-
-            MDRaisedButton:
-                text: "Registrarse"
-                size_hint: 0.35, 1 
-                md_bg_color: 217/255, 43/255, 4/255, 1 # Color F2F2F2
-                font_name: 'Iceberg-Regular.ttf' 
-                font_size: "22sp" 
-                text_color: [0.05, 0.05, 0.05, 1] 
-                on_release: root.show_new_account_screen()
-
-            Widget:
-                size_hint: 0.1, 1  # Margen derecho
-
 #Pantalla Login
 <LoginScreen>:
-
-    MDIconButton:
-        icon: "chevron-left" 
-        user_font_size: "45sp"
-        pos_hint: {'center_y': 0.96}
-        on_release: root.show_prev_screen()
-
-    Image:
-        source: 'X4.png' 
-        size_hint: None, None
-        size: "125dp", "98dp"
-        pos_hint: {'center_x': 0.5, 'center_y': 0.85}
-
-    Label:
-        text: "Ingreso"
-        #halign: "center"
-        font_size: "35sp"
-        font_name: "RobotoCondensed-Bold.ttf"
-        bold: True
-        color: [0.949, 0.949, 0.949, 1]  # Color F2F2F2 en formato RGBA
-        pos_hint: {'center_x': 0.5, 'center_y': 0.68}
-
-    MDBoxLayout:
+    BoxLayout: 
         orientation: 'vertical'
-        
-        MDWidget:
-            size_hint_y: 0.45 #Espacio card - Text ingresar
-
-        MDCard:
-            size_hint: 0.9, 0.6
-            #size: "380dp", "340dp"
-            pos_hint: {"center_x": 0.5}
-            elevation: 0.3
-            padding: "30dp"
-            spacing: "20dp"
-            radius: [10]
+        BoxLayout:
             orientation: 'vertical'
+            size_hint: 1, 0.35
+            pos_hint: {'center_x': 0.5, 'top': 1}
 
-            MDTextField:
-                id: user
-                hint_text: "Usuario"
-                icon_left: "account"
-                size_hint_x: 1
-                font_size: "18sp"
-                pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                write_tab: False
+            canvas.before:
+                Color:
+                    rgba: (45/255, 64/255, 230/255, 1)  # Color #2E37F5 
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
 
-            MDTextField:
-                id: password
-                hint_text: "Contraseña"
-                icon_left: "key"
-                password: True
-                size_hint_x: 1
-                font_size: "18sp"
-                pos_hint: {"center_x": 0.5, "center_y": 0.5}
-                write_tab: False
-            
+            FloatLayout:
+                size_hint: 1, 0.3
+                pos_hint: {'center_x': 0.5, 'top': 1}
 
-            MDLabel:
-                id: messages
-                text: ""
-                theme_text_color: "Error"
+                Image:
+                    source: 'X4.png' 
+                    size_hint: 0.3, 0.6
+                    #size: "125dp", "98dp"
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.65}
 
-            MDWidget: 
-                size_hint_y: 0.01
+                Label:
+                    text: "CUIDATEST"
+                    font_size: "40sp"
+                    font_name: "RobotoCondensed-Bold.ttf"
+                    bold: True
+                    color: [0.949, 0.949, 0.949, 1]  # Color F2F2F2 
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.23}
+    
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: 1, 0.65
+            pos_hint: {'center_x': 0.5}
 
-            #Boton
-            MDAnchorLayout:
-                MDRaisedButton:
-                    text: "Ingresar"
-                    size_hint: 0.5, 0.1
-                    #_min_width: 177
-                    #_min_height: 57
-                    pos_hint: {'x': 0.5, 'y': 0.3}
-                    md_bg_color: 217/255, 43/255, 4/255, 1 # Color fondo boton 
-                    font_name: 'Iceberg-Regular.ttf' 
-                    font_size: "22sp" 
-                    text_color: [0.05, 0.05, 0.05, 1]  # Color de letra 
-                    on_press: root.login()
+            canvas.before:
+                Color:
+                    rgba: (242/255, 242/255, 242/255, 1)  # Color #F2F2F2
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
 
-        MDWidget: #Espacio Limite inferior card
-            size_hint_y: 0.05
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint: 1, 1  # Tamaño BoxLayout
+                pos_hint: {'center_x': 0.5, 'center_y': 0.3} 
+                #size: "380dp", "340dp"
+                padding: "30dp" #Separacion lateral
+                spacing: "20dp"
+
+                MDTextField:
+                    id: user
+                    hint_text: "Usuario"
+                    icon_left: "account"
+                    size_hint_x: 1
+                    font_size: "18sp"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    write_tab: False
+                    hint_text_color_focus: 0, 0, 0, 1
+                    icon_left_color_normal: 0, 0, 0, .9 
+
+                MDTextField:
+                    id: password
+                    hint_text: "Contraseña"
+                    icon_left: "key"
+                    password: True
+                    size_hint_x: 1
+                    font_size: "18sp"
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    write_tab: False
+                    hint_text_color_focus: 0, 0, 0, 1
+                    icon_left_color_normal: 0, 0, 0, .9 
+                
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint: 1, 0.5  # Tamaño BoxLayout
+                    pos_hint: {'center_x': 0.48, 'center_y': 0.4} 
+
+                    BoxLayout:
+                        size_hint_x: None
+                        width: "130dp"
+                        orientation: 'horizontal'
+
+                        MDCheckbox:
+                            id: recordarUsuario
+                            size_hint: None, None
+                            size: "25dp", "25dp"
+                            radius: 10
+
+                        Label:
+                            text: "Recordar usuario"
+                            font_size: "14sp"
+                            font_name: "Nunito-VariableFont_wght.ttf"
+                            color: 0, 0, 0, 1  # Color Negro
+                            valign: 'middle'
+                    
+                    MDWidget: 
+                        size_hint_x: 0.3
+
+                    Button:
+                        text: "¿Olvidaste tu contraseña?"
+                        font_size: "14sp"
+                        bold: True 
+                        font_name: "Nunito-Italic-VariableFont_wght"
+                        color: 19/255, 27/255, 197/255, 1 
+                        background_color: 0, 0, 0, 0
+                        borderless: True
+                        on_release: root.show_new_account_screen()
+
+                MDLabel:
+                    id: messages
+                    text: ""
+                    theme_text_color: "Error"
+
+                MDWidget: 
+                    size_hint_y: 0.01
+
+                MDAnchorLayout:
+                    MDRaisedButton:
+                        text: "Ingresar"
+                        size_hint: 0.95, 0.1
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+                        md_bg_color: 45/255, 64/255, 230/255, 1 # Color fondo boton 
+                        font_name: 'Iceberg-Regular.ttf' 
+                        font_size: "22sp" 
+                        text_color: 242/255, 242/255, 242/255, 1  # Color de letra 
+                        _radius: 15
+                        on_release: root.login()
+
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: "102dp"
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.1}
+                    size_hint_x: None
+
+                    Label:
+                        text: "¿No tienes cuenta?"
+                        font_size: "14sp"
+                        font_name: "Nunito-VariableFont_wght.ttf"
+                        color: 0, 0, 0, 1  # Color Negro
+
+                    Button:
+                        text: "Crear cuenta"
+                        font_size: "15sp"
+                        semibold: True 
+                        font_name: "Nunito-Italic-VariableFont_wght.ttf"
+                        color: 19/255, 27/255, 197/255, 1 
+                        background_color: 0, 0, 0, 0
+                        borderless: True
+                        on_release: root.show_new_account_screen()
 
 
 <NewAccountScreen>:
