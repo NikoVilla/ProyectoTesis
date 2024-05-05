@@ -93,6 +93,10 @@ class LoginScreen(MDScreen):
         self.manager.transition.direction = 'left'
         self.manager.current = 'new_account_screen'
 
+    def show_prev_screen(self): # Método para mostrar la pantalla de login
+        self.manager.transition.direction = 'left'
+        self.manager.current = 'prev_screen'
+
 # Clase para la pantalla de creación de nueva cuenta
 class NewAccountScreen(MDScreen):
 
@@ -153,7 +157,8 @@ class MainApp(MDApp):
         self.title = "Sistema de monitoreo de salud"
 
         if platform != 'android':
-            Window.size = (414, 736)
+            #Window.size = (414, 736)
+            Window.size = (360, 700)
 
         self.manager = MDScreenManager()
         self.manager.add_widget(PrevScreen(name='prev_screen'))
@@ -161,7 +166,7 @@ class MainApp(MDApp):
         self.manager.add_widget(AppScreen(name='app_screen'))
         self.manager.add_widget(NewAccountScreen(name='new_account_screen'))
 
-        self.manager.current = "prev_screen"
+        self.manager.current = "login_screen"
 
         return self.manager
 
