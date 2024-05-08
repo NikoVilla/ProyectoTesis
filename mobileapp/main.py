@@ -145,7 +145,7 @@ class MainApp(MDApp):
         self.title = "Sistema de monitoreo de salud"
 
         if platform != 'android':
-            Window.size = (414, 736)
+            Window.size = (414, 600) #736
             #Window.size = (360, 700)
 
         self.manager = MDScreenManager()

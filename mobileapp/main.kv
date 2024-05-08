@@ -21,14 +21,12 @@
                 Image:
                     source: './Logos/X4.png' 
                     size_hint: 0.3, 0.6
-                    #size: "125dp", "98dp"
                     pos_hint: {'center_x': 0.5, 'center_y': 0.65}
 
                 Label:
                     text: "CUIDATEST"
                     font_size: "40sp"
                     font_name: "./Fuentes/RobotoCondensed-Bold.ttf"
-                    bold: True
                     color: [0.949, 0.949, 0.949, 1]  # Color F2F2F2 
                     pos_hint: {'center_x': 0.5, 'center_y': 0.23}
     
@@ -48,7 +46,6 @@
                 orientation: 'vertical'
                 size_hint: 1, 1  # Tamaño BoxLayout
                 pos_hint: {'center_x': 0.5, 'center_y': 0.3} 
-                #size: "380dp", "340dp"
                 padding: "30dp" #Separacion lateral
                 spacing: "20dp"
 
@@ -56,7 +53,6 @@
                     text: "Ingreso"
                     font_size: "30sp"
                     font_name: "./Fuentes/Iceberg-Regular.ttf"
-                    bold: True
                     color: [0, 0, 0, 1]  # Color Negro
                     pos_hint: {'center_x': 0.5, 'center_y': 0.9}
 
@@ -70,7 +66,6 @@
                     write_tab: False
                     hint_text_color_focus: 0, 0, 0, 1
                     icon_left_color_normal: 0, 0, 0, .9 
-
                 MDTextField:
                     id: password
                     hint_text: "Contraseña"
@@ -92,17 +87,15 @@
                         size_hint_x: None
                         width: "130dp"
                         orientation: 'horizontal'
-
                         MDCheckbox:
                             id: recordarUsuario
                             size_hint: None, None
                             size: "25dp", "25dp"
                             radius: 10
-
                         Label:
                             text: "Recordar usuario"
                             font_size: "14sp"
-                            font_name: "./Fuentes/Nunito-VariableFont_wght.ttf"
+                            font_name: "./Fuentes/Nunito-SemiBold.ttf"
                             color: 0, 0, 0, 1  # Color Negro
                             valign: 'middle'
                     
@@ -112,7 +105,7 @@
                     Button:
                         text: "¿Olvidaste tu contraseña?"
                         font_size: "14sp"
-                        font_name: "./Fuentes/Nunito-Italic-VariableFont_wght"
+                        font_name: "./Fuentes/Nunito-SemiBold.ttf"
                         color: 19/255, 27/255, 197/255, 1 
                         background_color: 0, 0, 0, 0
                         borderless: True
@@ -132,7 +125,7 @@
                         size_hint: 0.95, 0.1
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                         md_bg_color: 45/255, 64/255, 230/255, 1 # Color fondo boton 
-                        font_name: './Fuentes/Iceberg-Regular.ttf' 
+                        font_name: "./Fuentes/Nunito-SemiBold.ttf"
                         font_size: "22sp" 
                         text_color: 242/255, 242/255, 242/255, 1  # Color de letra 
                         _radius: 15
@@ -148,13 +141,13 @@
                     Label:
                         text: "¿No tienes cuenta?"
                         font_size: "14sp"
-                        font_name: "./Fuentes/Nunito-VariableFont_wght.ttf"
+                        font_name: "./Fuentes/Nunito-SemiBold.ttf"
                         color: 0, 0, 0, 1  # Color Negro
 
                     Button:
                         text: "Regístrate"
                         font_size: "15sp"
-                        font_name: "./Fuentes/Nunito-Italic-VariableFont_wght.ttf"
+                        font_name: "./Fuentes/Nunito-SemiBold.ttf"
                         color: 19/255, 27/255, 197/255, 1 
                         background_color: 0, 0, 0, 0
                         borderless: True
@@ -189,14 +182,12 @@
                 Image:
                     source: './Logos/X4.png' 
                     size_hint: 0.3, 0.6
-                    #size: "125dp", "98dp"
                     pos_hint: {'center_x': 0.5, 'center_y': 0.65}
 
                 Label:
                     text: "CUIDATEST"
                     font_size: "40sp"
                     font_name: "./Fuentes/RobotoCondensed-Bold.ttf"
-                    bold: True
                     color: [0.949, 0.949, 0.949, 1]  # Color F2F2F2 
                     pos_hint: {'center_x': 0.5, 'center_y': 0.23}
     
@@ -216,7 +207,6 @@
                 orientation: 'vertical'
                 size_hint: 1, 1  # Tamaño BoxLayout
                 pos_hint: {'center_x': 0.5, 'center_y': 0.3} 
-                #size: "380dp", "340dp"
                 padding: "30dp" #Separacion lateral
                 spacing: "20dp"
 
@@ -224,8 +214,7 @@
                     text: "Registro"
                     font_size: "30sp"
                     font_name: "./Fuentes/Iceberg-Regular.ttf"
-                    bold: True
-                    color: [0, 0, 0, 1]  # Color Negro
+                    color: (0, 0, 0, 1)  # Color Negro
                     pos_hint: {'center_x': 0.5, 'center_y': 0.9}
 
                 MDTextField:
@@ -292,26 +281,63 @@
                     Label:
                         text: "¿Ya tienes una cuenta?"
                         font_size: "14sp"
-                        font_name: "./Fuentes/Nunito-VariableFont_wght.ttf"
+                        font_name: "./Fuentes/Nunito-SemiBold.ttf"
                         color: 0, 0, 0, 1  # Color Negro
 
                     Button:
                         text: "Iniciar Sesión"
                         font_size: "15sp"
-                        semibold: True 
-                        font_name: "./Fuentes/Nunito-Italic-VariableFont_wght.ttf"
+                        font_name: "./Fuentes/Nunito-SemiBold.ttf"
                         color: 19/255, 27/255, 197/255, 1 
                         background_color: 0, 0, 0, 0
                         borderless: True
                         on_release: root.show_new_account_screen()
 
-<AppScreen>:
+<CustomCard@MDCard>:
+    titulo_card: ' '
+    valor_signo: ' '
+    rango: ' '
+    estado: ' '
 
+    orientation: "vertical"
+    size_hint: None, None
+    size: "155dp", "180dp"
+    elevation: 0.6
+    md_bg_color: 242/255, 242/255, 242/255, 1
+    
+    BoxLayout:
+        orientation: 'vertical'
+        #padding: "8dp"
+
+        MDLabel:
+            id: title
+            text: root.titulo_card
+            theme_text_color: "Primary"
+            halign: "center"
+
+        MDLabel:
+            id: number
+            text: root.valor_signo
+            font_style: "H2"
+            halign: "center"
+
+        MDLabel:
+            id: text1
+            text: root.rango
+            halign: "center"
+
+        MDLabel:
+            id: text2
+            text: root.estado
+            halign: "center"
+
+
+<AppScreen>:
     BoxLayout: 
         orientation: 'vertical'
-        BoxLayout:
-            orientation: 'vertical'
-            size_hint: 1, 0.35
+        BoxLayout: #
+            orientation: 'horizontal'
+            size_hint: 1, 0.2
             pos_hint: {'center_x': 0.5, 'top': 1}
 
             canvas.before:
@@ -321,50 +347,157 @@
                     pos: self.pos
                     size: self.size
 
-            FloatLayout:
-                size_hint: 1, 0.3
-                pos_hint: {'center_x': 0.5, 'top': 1}
-
-                MDIconButton:
-                    icon: "chevron-left" 
-                    user_font_size: "50sp"
-                    pos_hint: {'center_y': 0.88}
-                    on_press: root.show_login_screen()
-
+            BoxLayout: #2/10 del box horizontal
+                orientation: 'vertical'
+                size_hint: 0.2, None
+                pos_hint: {'center_y': 0.52}
+                padding: "1dp"
+                spacing: "10dp"
                 Image:
                     source: './Logos/X4.png' 
-                    size_hint: 0.3, 0.6
-                    #size: "125dp", "98dp"
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.65}
-
+                    size_hint: None, None
+                    pos_hint: {'center_x': 0.5}
                 Label:
                     text: "CUIDATEST"
-                    font_size: "40sp"
+                    font_size: "15sp"
                     font_name: "./Fuentes/RobotoCondensed-Bold.ttf"
-                    bold: True
-                    color: [0.949, 0.949, 0.949, 1]  # Color F2F2F2 
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.23}
-    
+                    color: (0.949, 0.949, 0.949, 1)  # Color F2F2F2 
+                    pos_hint: {'center_x': 0.5}
+            
+            AnchorLayout: #
+                anchor_x: 'left'
+                size_hint: 0.5, None
+                pos_hint: {'center_y': 0.5}
+                padding: "1dp"
+                spacing: "2dp"
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: self.minimum_height
+                    Label:
+                        text: "Bienvenido de nuevo"
+                        font_size: "15sp"
+                        font_name: "./Fuentes/Inter-Medium.ttf"
+                        color: (233/255, 233/255, 233/255, 1)  # Color E9E9E9 
+                        halign: 'left'
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        text_size: self.width, None
+                    Label:
+                        text: "Nicolas Villanueva"
+                        font_size: "20sp"
+                        font_name: "./Fuentes/Inter-SemiBold.ttf"
+                        color: (0.949, 0.949, 0.949, 1)  # Color F2F2F2 
+                        halign: 'left'
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        text_size: self.width, None
 
-    MDScrollView:
-        # md_bg_color: app.theme_cls.primary_color
-        do_scroll_x: False
-        effect_cls: 'ScrollEffect'
-        scroll_type: ['content']
-        size_hint: 1, 1
+            BoxLayout: 
+                orientation: 'vertical'
+                size_hint: 0.1, None
+                pos_hint: {'center_y': 0.55}
+                padding: "1dp"
+                spacing: "3dp"
+                MDIconButton:
+                    icon: "logout"
+                    theme_icon_color: "Custom"
+                    icon_color: (0.949, 0.949, 0.949, 1)
+                    icon_size: "30sp"
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    on_release: app.root.get_screen('app_screen').log_out()
+            
+                Label:
+                    text: "Salir"
+                    font_size: "15sp"
+                    font_name: "./Fuentes/Inter-Medium.ttf"
+                    color: (0.949, 0.949, 0.949, 1)  # Color F2F2F2 
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                    
+        MDScrollView:
+            #md_bg_color: app.theme_cls.primary_color
+            do_scroll_x: False
+            effect_cls: 'ScrollEffect'
+            scroll_type: ['content']
+            size_hint: 1, 1
+
+            GridLayout:
+                cols: 2
+                rows: 2
+                padding: "20dp"
+                spacing: "20dp"
+                pos_hint: {'center_x': 0.5}
+
+                CustomCard:
+                    titulo_card: "Frecuencia Cardíaca (Bpm)"
+                    valor_signo: "99"
+                    rango: "Rango"
+                    estado: "Estado"
+
+                CustomCard:
+                    titulo_card: "Saturación de Oxígeno (SpO2%)"
+                    valor_signo: "99"
+                    rango: "Rango"
+                    estado: "Estado"
+
+                CustomCard:
+                    titulo_card: "Temperatura Corporal (°C)"
+                    valor_signo: "99"
+                    rango: "Rango"
+                    estado: "Estado"
+
+                CustomCard:
+                    titulo_card: "Velocidad Angular (dps)"
+                    valor_signo: "99"
+                    rango: "Rango"
+                    estado: "Estado"
 
 
-        MDBoxLayout:
-            orientation: 'vertical'
-            size_hint_y: None
-            size_hint_x: 1
-            height: self.minimum_height
-            padding: "0dp"
-            spacing: "20dp"
-            # md_bg_color: "white"
+        BoxLayout: #Menu inferior
+            orientation: 'horizontal'
+            size_hint: 1, 0.1
+            pos_hint: {'center_x': 0.5, 'bottom': 1}
 
-            MDWidget:
-                size_hint_y: None
-                height: "2dp"
+            canvas.before:
+                Color:
+                    rgba: (45/255, 64/255, 230/255, 1)  # Color #2E37F5 
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
 
-    
+            MDIconButton:
+                icon: "home"
+                theme_icon_color: "Custom"
+                icon_color: (0.949, 0.949, 0.949, 1)
+                icon_size: "40sp"
+                pos_hint: {'center_y': 0.5}
+                size_hint_x: 1
+                #on_release: app.root.get_screen('app_screen').log_out()
+
+            MDIconButton:
+                icon: "history" #clipboard-text-clock-outline
+                theme_icon_color: "Custom"
+                icon_color: (0.949, 0.949, 0.949, 1)
+                icon_size: "40sp"
+                pos_hint: {'center_y': 0.5}
+                size_hint_x: 1
+                #on_release: app.root.get_screen('app_screen').log_out()
+
+            MDIconButton:
+                icon: "heart-cog-outline" #account-alert-outline
+                theme_icon_color: "Custom"
+                icon_color: (0.949, 0.949, 0.949, 1)
+                icon_size: "40sp"
+                pos_hint: {'center_y': 0.5}
+                size_hint_x: 1
+                #on_release: app.root.get_screen('app_screen').log_out()
+
+            MDIconButton:
+                icon: "account-circle-outline"
+                theme_icon_color: "Custom"
+                icon_color: (0.949, 0.949, 0.949, 1)
+                icon_size: "40sp"
+                pos_hint: {'center_y': 0.5}
+                size_hint_x: 1
+                #on_release: app.root.get_screen('app_screen').log_out()
