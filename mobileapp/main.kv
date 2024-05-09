@@ -298,44 +298,54 @@
     valor_signo: ' '
     rango: ' '
     estado: ' '
-
     orientation: "vertical"
-    size_hint: None, None
-    size: "155dp", "180dp"
+    size: "170dp", "200dp"
     elevation: 0.6
     md_bg_color: 242/255, 242/255, 242/255, 1
+    size_hint: 0.01, None
     
     BoxLayout:
         orientation: 'vertical'
-        #padding: "8dp"
 
         MDLabel:
-            id: title
+            id: titulo_card
             text: root.titulo_card
-            theme_text_color: "Primary"
             halign: "center"
+            font_name: './Fuentes/Inter-Medium.ttf'
+            font_size: "15dp"
+            color: 0, 0, 0, 1
 
         MDLabel:
-            id: number
+            id: valor_signo
             text: root.valor_signo
-            font_style: "H2"
             halign: "center"
-
+            font_name: './Fuentes/Inter-Medium.ttf'
+            font_size: "45dp"
+            color: 0, 0, 0, 1
+            padding: [0,"30dp",0,"10dp"]
+            
         MDLabel:
-            id: text1
+            id: rango
             text: root.rango
             halign: "center"
+            font_name: './Fuentes/Inter-Regular.ttf'
+            font_size: "15dp"
+            color: 0, 0, 0, 1
 
         MDLabel:
-            id: text2
+            id: estado
             text: root.estado
             halign: "center"
-
+            font_name: './Fuentes/Inter-Regular.ttf'
+            font_size: "15dp"
+            color: 36/255, 213/255, 33/255, 1
 
 <AppScreen>:
     BoxLayout: 
         orientation: 'vertical'
-        BoxLayout: #
+
+#INICIO PANEL SUPERIOR
+        BoxLayout: 
             orientation: 'horizontal'
             size_hint: 1, 0.2
             pos_hint: {'center_x': 0.5, 'top': 1}
@@ -413,48 +423,142 @@
                     font_name: "./Fuentes/Inter-Medium.ttf"
                     color: (0.949, 0.949, 0.949, 1)  # Color F2F2F2 
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+#FIN PANEL SUPERIOR
 
-                    
+#CONTENIDO                
         MDScrollView:
-            #md_bg_color: app.theme_cls.primary_color
             do_scroll_x: False
             effect_cls: 'ScrollEffect'
             scroll_type: ['content']
             size_hint: 1, 1
 
-            GridLayout:
-                cols: 2
-                rows: 2
-                padding: "20dp"
-                spacing: "20dp"
-                pos_hint: {'center_x': 0.5}
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+                Label:
+                    text: "Signos vitales"
+                    font_size: "25sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (0, 0, 0, 1)  # Color F2F2F2 
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    halign: 'left'
+                    valign: 'top'
+                    text_size: self.width, None
+                    padding: ["25dp", "15dp", 0, "22dp"] #izq, top, der, inf
 
-                CustomCard:
-                    titulo_card: "Frecuencia Cardíaca (Bpm)"
-                    valor_signo: "99"
-                    rango: "Rango"
-                    estado: "Estado"
+                BoxLayout:
+                    orientation: 'horizontal'
+                    size_hint: 1, 0.5  # Tamaño BoxLayout
+                    padding: ["30dp", 0, "40dp", 0]
 
-                CustomCard:
-                    titulo_card: "Saturación de Oxígeno (SpO2%)"
-                    valor_signo: "99"
-                    rango: "Rango"
-                    estado: "Estado"
+                    BoxLayout:
+                        size_hint_x: None
+                        width: "170dp"
+                        orientation: 'horizontal'
+                        #pos_hint: {'center_y': 0.05}
+                        
+                        Label:
+                            text: "Última medición:" #+ str(self.root.fecha_hora)
+                            font_size: "12sp"
+                            font_name: "./Fuentes/Nunito-SemiBold.ttf"
+                            color: 0, 0, 0, 1  # Color Negro
+                            halign: 'left'
+                            valign: 'middle'
+                            text_size: self.width, None
+                        # Label:
+                        #     text: "Fecha y Hora"
+                        #     font_size: "11sp"
+                        #     font_name: "./Fuentes/Nunito-SemiBold.ttf"
+                        #     color: 0, 0, 0, 1  # Color Negro
+                        #     halign: 'left'
+                        #     valign: 'middle'
+                        #     text_size: self.width, None
+                    BoxLayout:
+                        size_hint_x: 1
 
-                CustomCard:
-                    titulo_card: "Temperatura Corporal (°C)"
-                    valor_signo: "99"
-                    rango: "Rango"
-                    estado: "Estado"
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_x: None
+                        width: "85dp"
+                        #pos_hint: {'right': 1}
 
-                CustomCard:
-                    titulo_card: "Velocidad Angular (dps)"
-                    valor_signo: "99"
-                    rango: "Rango"
-                    estado: "Estado"
+                        MDIconButton:
+                            icon: "history"
+                            theme_icon_color: "Custom"
+                            icon_color: (45/255, 64/255, 230/255, 1)
+                            icon_size: "16sp"
+                            pos_hint: {'center_y': 0.5}
 
+                        Button:
+                            text: "Ver historial"
+                            font_size: "12sp"
+                            font_name: "./Fuentes/Nunito-SemiBold.ttf"
+                            color: 19/255, 27/255, 197/255, 1 
+                            background_color: 0, 0, 0, 0
+                            borderless: True
+                            pos_hint: {'center_y': 0.5}
+                            on_release: root.show_new_account_screen()
 
-        BoxLayout: #Menu inferior
+                GridLayout:
+                    cols: 2
+                    rows: 2
+                    padding: ["25dp", "13dp", "25dp", "25dp"]
+                    spacing: "25dp"
+                    size_hint_y: None
+                    height: self.minimum_height
+
+                    CustomCard:
+                        titulo_card: "Frecuencia Cardíaca (Bpm)"
+                        valor_signo: "99"
+                        rango: "Rango"
+                        estado: "Estado"
+
+                    CustomCard:
+                        titulo_card: "Saturación de Oxígeno (SpO2%)"
+                        valor_signo: "99"
+                        rango: "Rango"
+                        estado: "Estado"
+
+                    CustomCard:
+                        titulo_card: "Temperatura Corporal (°C)"
+                        valor_signo: "99"
+                        rango: "Rango"
+                        estado: "Estado"
+
+                    CustomCard:
+                        titulo_card: "Velocidad Angular (°/s)" #grados por segundo (°/s) o revoluciones por segundo (RPS)
+                        valor_signo: "99"
+                        rango: "Rango"
+                        estado: "Estado"
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    size_hint_y: None
+                    height: self.minimum_height
+                    Label:
+                        text: "Batería Dispositivo"
+                        font_size: "25sp"
+                        font_name: "./Fuentes/Inter-SemiBold.ttf"
+                        color: (0, 0, 0, 1)  # Color F2F2F2 
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        halign: 'left'
+                        text_size: self.width, None
+                        padding: ["25dp", "13dp", 0, "20dp"] #izq, top, der, inf
+
+                    MDCard:
+                        orientation: "horizontal"
+                        size: "170dp", "60dp"
+                        elevation: 0.6
+                        md_bg_color: 242/255, 242/255, 242/255, 1
+                        size_hint: 0.5, None
+                        #padding: ["25dp", 0, 0, "20dp"]
+                        pos_hint: {'center_x': 0.31, 'center_y': 0.5}
+
+#INICIO PANEL INFERIOR
+        BoxLayout:
             orientation: 'horizontal'
             size_hint: 1, 0.1
             pos_hint: {'center_x': 0.5, 'bottom': 1}
@@ -501,3 +605,5 @@
                 pos_hint: {'center_y': 0.5}
                 size_hint_x: 1
                 #on_release: app.root.get_screen('app_screen').log_out()
+
+#FIN PANEL INFERIOR

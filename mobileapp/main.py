@@ -145,8 +145,11 @@ class MainApp(MDApp):
         self.title = "Sistema de monitoreo de salud"
 
         if platform != 'android':
+            #Window.size = (450, 1000) #2.2
+            #Window.size = (540, 1200) #Mitad escala
             Window.size = (414, 600) #736
             #Window.size = (360, 700)
+            
 
         self.manager = MDScreenManager()
         self.manager.add_widget(LoginScreen(name='login_screen'))
