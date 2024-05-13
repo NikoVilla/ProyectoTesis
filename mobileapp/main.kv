@@ -81,35 +81,40 @@
                 BoxLayout:
                     orientation: 'horizontal'
                     size_hint: 1, 0.5  # Tamaño BoxLayout
-                    pos_hint: {'center_x': 0.48, 'center_y': 0.4} 
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.4} 
 
                     BoxLayout:
                         size_hint_x: None
-                        width: "130dp"
+                        width: "110dp"
                         orientation: 'horizontal'
+
                         MDCheckbox:
                             id: recordarUsuario
-                            size_hint: None, None
+                            #size_hint: None, None
                             size: "25dp", "25dp"
                             radius: 10
+                            halign: 'left'
+                            text_size: self.width, None
+
                         Label:
                             text: "Recordar usuario"
                             font_size: "14sp"
                             font_name: "./Fuentes/Nunito-SemiBold.ttf"
                             color: 0, 0, 0, 1  # Color Negro
-                            valign: 'middle'
                     
-                    MDWidget: 
-                        size_hint_x: 0.3
+                    BoxLayout:
+                        size_hint_x: 1
 
                     Button:
                         text: "¿Olvidaste tu contraseña?"
                         font_size: "14sp"
                         font_name: "./Fuentes/Nunito-SemiBold.ttf"
                         color: 19/255, 27/255, 197/255, 1 
-                        background_color: 0, 0, 0, 0
+                        background_color: 0., 0., 0, 0
                         borderless: True
-                        on_release: root.show_new_account_screen()
+                        halign: 'right'
+                        text_size: self.width, None
+                        #on_release: root.show_new_account_screen()
 
                 MDLabel:
                     id: messages
@@ -120,38 +125,44 @@
                     size_hint_y: 0.01
 
                 MDAnchorLayout:
+                    padding: [0, 0, 0, "25dp"]
                     MDRaisedButton:
                         text: "Ingresar"
                         size_hint: 0.95, 0.1
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                         md_bg_color: 45/255, 64/255, 230/255, 1 # Color fondo boton 
-                        font_name: "./Fuentes/Nunito-SemiBold.ttf"
+                        font_name: "./Fuentes/Iceberg-Regular.ttf"
                         font_size: "22sp" 
                         text_color: 242/255, 242/255, 242/255, 1  # Color de letra 
                         _radius: 15
                         on_release: root.login()
 
-
                 BoxLayout:
                     orientation: 'horizontal'
-                    spacing: "95dp"
-                    pos_hint: {'center_x': 0.45, 'center_y': 0.1}
-                    size_hint_x: None
+                    pos_hint: {'center_x': 0.5}
+                    spacing: "8dp"
+                
+                    BoxLayout:
+                        orientation: 'horizontal'
 
-                    Label:
-                        text: "¿No tienes cuenta?"
-                        font_size: "14sp"
-                        font_name: "./Fuentes/Nunito-SemiBold.ttf"
-                        color: 0, 0, 0, 1  # Color Negro
-
+                        Label:
+                            text: "¿No tienes cuenta?"
+                            font_size: "14sp"
+                            font_name: "./Fuentes/Nunito-SemiBold.ttf"
+                            color: 0, 0, 0, 1  # Color Negro
+                            halign: 'right'
+                            text_size: self.width, None
                     Button:
-                        text: "Regístrate"
+                        text: "Regístrate Aquí"
                         font_size: "15sp"
                         font_name: "./Fuentes/Nunito-SemiBold.ttf"
                         color: 19/255, 27/255, 197/255, 1 
                         background_color: 0, 0, 0, 0
                         borderless: True
                         on_release: root.show_new_account_screen()
+                        halign: 'left'
+                        text_size: self.width, None
+                        
 
 # Pantalla Crear cuenta 
 <NewAccountScreen>:
@@ -178,6 +189,8 @@
                     user_font_size: "50sp"
                     pos_hint: {'center_y': 0.88}
                     on_press: root.show_login_screen()
+                    theme_text_color: 'Custom'
+                    icon_color: 1, 1, 1, 1
 
                 Image:
                     source: './Logos/X4.png' 
@@ -218,7 +231,7 @@
                     pos_hint: {'center_x': 0.5, 'center_y': 0.9}
 
                 MDTextField:
-                    id: user
+                    id: new_user
                     hint_text: "Usuario"
                     icon_left: "account"
                     size_hint_x: 1
@@ -229,7 +242,7 @@
                     icon_left_color_normal: 0, 0, 0, .9 
 
                 MDTextField:
-                    id: password
+                    id: new_user_password
                     hint_text: "Contraseña"
                     icon_left: "key"
                     password: True
@@ -261,6 +274,7 @@
                     size_hint_y: 0.01
 
                 MDAnchorLayout:
+                    padding: [0, 0, 0, "25dp"]
                     MDRaisedButton:
                         text: "Registrarse"
                         size_hint: 0.95, 0.1
@@ -270,30 +284,36 @@
                         font_size: "22sp" 
                         text_color: 242/255, 242/255, 242/255, 1  # Color de letra 
                         _radius: 15
-                        on_release: root.login()
+                        on_press: root.new_account()
 
                 BoxLayout:
                     orientation: 'horizontal'
-                    spacing: "115dp"
-                    pos_hint: {'center_x': 0.45, 'center_y': 0.1}
-                    size_hint_x: None
+                    pos_hint: {'center_x': 0.5}
+                    spacing: "8dp"
+                
+                    BoxLayout:
+                        orientation: 'horizontal'
 
-                    Label:
-                        text: "¿Ya tienes una cuenta?"
-                        font_size: "14sp"
-                        font_name: "./Fuentes/Nunito-SemiBold.ttf"
-                        color: 0, 0, 0, 1  # Color Negro
+                        Label:
+                            text: "¿Tienes una cuenta?"
+                            font_size: "14sp"
+                            font_name: "./Fuentes/Nunito-SemiBold.ttf"
+                            color: 0, 0, 0, 1  # Color Negro
+                            halign: 'right'
+                            text_size: self.width, None
 
                     Button:
-                        text: "Iniciar Sesión"
+                        text: "Inicia Sesión Aqui"
                         font_size: "15sp"
                         font_name: "./Fuentes/Nunito-SemiBold.ttf"
                         color: 19/255, 27/255, 197/255, 1 
                         background_color: 0, 0, 0, 0
                         borderless: True
-                        on_release: root.show_new_account_screen()
+                        on_release: root.show_login_screen()
+                        halign: 'left'
+                        text_size: self.width, None
 
-<CustomCard@MDCard>:
+<SignosCard@MDCard>:
     titulo_card: ' '
     valor_signo: ' '
     rango: ' '
@@ -423,6 +443,7 @@
                     font_name: "./Fuentes/Inter-Medium.ttf"
                     color: (0.949, 0.949, 0.949, 1)  # Color F2F2F2 
                     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    
 #FIN PANEL SUPERIOR
 
 #CONTENIDO                
@@ -509,25 +530,25 @@
                     size_hint_y: None
                     height: self.minimum_height
 
-                    CustomCard:
+                    SignosCard:
                         titulo_card: "Frecuencia Cardíaca (Bpm)"
                         valor_signo: "99"
                         rango: "Rango"
                         estado: "Estado"
 
-                    CustomCard:
+                    SignosCard:
                         titulo_card: "Saturación de Oxígeno (SpO2%)"
                         valor_signo: "99"
                         rango: "Rango"
                         estado: "Estado"
 
-                    CustomCard:
+                    SignosCard:
                         titulo_card: "Temperatura Corporal (°C)"
                         valor_signo: "99"
                         rango: "Rango"
                         estado: "Estado"
 
-                    CustomCard:
+                    SignosCard:
                         titulo_card: "Velocidad Angular (°/s)" #grados por segundo (°/s) o revoluciones por segundo (RPS)
                         valor_signo: "99"
                         rango: "Rango"
@@ -556,6 +577,51 @@
                         size_hint: 0.5, None
                         #padding: ["25dp", 0, 0, "20dp"]
                         pos_hint: {'center_x': 0.31, 'center_y': 0.5}
+
+<HistorialCard@MDCard>:
+    titulo_h_card: ' '
+    valor_h_signo: ' '
+    rango: ' '
+    estado: ' '
+    orientation: "vertical"
+    size: "170dp", "200dp"
+    elevation: 0.6
+    md_bg_color: 242/255, 242/255, 242/255, 1
+    size_hint: 0.01, None
+    
+    BoxLayout:
+        orientation: 'vertical'
+
+        MDLabel:
+            id: titulo_card
+            text: root.titulo_card
+            halign: "center"
+            font_name: './Fuentes/Inter-Medium.ttf'
+            font_size: "15dp"
+            color: 0, 0, 0, 1
+
+<HisotryScreen>:
+    BoxLayout: 
+        orientation: 'vertical'
+
+#INICIO PANEL SUPERIOR hISTORIAL SCREEN
+        BoxLayout: 
+            orientation: 'horizontal'
+            size_hint: 1, 0.144
+            pos_hint: {'center_x': 0.5, 'top': 1}
+
+            canvas.before:
+                Color:
+                    rgba: (45/255, 64/255, 230/255, 1)  # Color #2E37F5 
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            Image:
+                source: './Logos/X4.png' 
+                size_hint: None, None
+                pos_hint: {'center_x': 0.5}
+#FIN PANEL SUPERIOR HISTORIAL SCREEN
 
 #INICIO PANEL INFERIOR
         BoxLayout:

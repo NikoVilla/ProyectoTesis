@@ -14,12 +14,12 @@ class Database:
 
     def create_user_table(self):
         self.cursor.execute(
-            "CREATE TABLE IF NOT EXISTS usuario(id integer PRIMARY KEY AUTOINCREMENT, usuario varchar(60) NOT NULL, password varchar(60) NOT NULL, nombre varchar(60) NOT NULL, apellido varchar(60) NOT NULL, logged_in integer NOT NULL DEFAULT 0)")
+            "CREATE TABLE IF NOT EXISTS usuario(id integer PRIMARY KEY AUTOINCREMENT, usuario varchar(60) NOT NULL, password varchar(60) NOT NULL, logged_in integer NOT NULL DEFAULT 0)") 
         self.con.commit()
 
-    def create_user(self, usuario, password, nombre, apellido):
+    def create_user(self, usuario, password):
         self.cursor.execute(
-            "INSERT INTO usuario(usuario, password, nombre, apellido, logged_in) VALUES(?, ?, ?, ?, 0)", (usuario, password, nombre, apellido))
+            "INSERT INTO usuario(usuario, password, logged_in) VALUES(?, ?, 0)", (usuario, password))
         self.con.commit()
 
     def get_user(self, username):
