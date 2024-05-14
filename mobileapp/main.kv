@@ -313,7 +313,58 @@
                         halign: 'left'
                         text_size: self.width, None
 
-<SignosCard@MDCard>:
+# ALGO
+<MenuInferior>:
+    orientation: 'horizontal'
+    size_hint: 1, 0.1
+    pos_hint: {'center_x': 0.5, 'bottom': 1}
+
+    canvas.before:
+        Color:
+            rgba: (45/255, 64/255, 230/255, 1)  # Color #2E37F5 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    MDIconButton:
+        icon: "home"
+        theme_icon_color: "Custom"
+        icon_color: (0.949, 0.949, 0.949, 1)
+        icon_size: "40sp"
+        pos_hint: {'center_y': 0.5}
+        size_hint_x: 1
+        on_release: root.show_app_screen()
+
+    MDIconButton:
+        icon: "history" #clipboard-text-clock-outline
+        theme_icon_color: "Custom"
+        icon_color: (0.949, 0.949, 0.949, 1)
+        icon_size: "40sp"
+        pos_hint: {'center_y': 0.5}
+        size_hint_x: 1
+        on_release: root.show_history_screen()
+
+    MDIconButton:
+        icon: "heart-cog-outline" #account-alert-outline
+        theme_icon_color: "Custom"
+        icon_color: (0.949, 0.949, 0.949, 1)
+        icon_size: "40sp"
+        pos_hint: {'center_y': 0.5}
+        size_hint_x: 1
+        #on_release: root.show_history_screen()
+
+    MDIconButton:
+        icon: "account-circle-outline"
+        theme_icon_color: "Custom"
+        icon_color: (0.949, 0.949, 0.949, 1)
+        icon_size: "40sp"
+        pos_hint: {'center_y': 0.5}
+        size_hint_x: 1
+        #on_release: root.show_history_screen()
+
+
+
+<SignosCard>:
     titulo_card: ' '
     valor_signo: ' '
     rango: ' '
@@ -469,41 +520,27 @@
                     text_size: self.width, None
                     padding: ["25dp", "15dp", 0, "22dp"] #izq, top, der, inf
 
-                BoxLayout:
+                BoxLayout: #contenedor de ult + ver his
                     orientation: 'horizontal'
                     size_hint: 1, 0.5  # Tamaño BoxLayout
                     padding: ["30dp", 0, "40dp", 0]
-
-                    BoxLayout:
-                        size_hint_x: None
-                        width: "170dp"
-                        orientation: 'horizontal'
-                        #pos_hint: {'center_y': 0.05}
                         
-                        Label:
-                            text: "Última medición:" #+ str(self.root.fecha_hora)
-                            font_size: "12sp"
-                            font_name: "./Fuentes/Nunito-SemiBold.ttf"
-                            color: 0, 0, 0, 1  # Color Negro
-                            halign: 'left'
-                            valign: 'middle'
-                            text_size: self.width, None
-                        # Label:
-                        #     text: "Fecha y Hora"
-                        #     font_size: "11sp"
-                        #     font_name: "./Fuentes/Nunito-SemiBold.ttf"
-                        #     color: 0, 0, 0, 1  # Color Negro
-                        #     halign: 'left'
-                        #     valign: 'middle'
-                        #     text_size: self.width, None
+                    Label:
+                        text: "Última medición:" #+ str(self.root.fecha_hora)
+                        font_size: "12sp"
+                        font_name: "./Fuentes/Nunito-SemiBold.ttf"
+                        color: 0, 0, 0, 1  # Color Negro
+                        halign: 'left'
+                        valign: 'middle'
+                        text_size: self.width, None
+
                     BoxLayout:
                         size_hint_x: 1
 
                     BoxLayout:
                         orientation: 'horizontal'
-                        size_hint_x: None
-                        width: "85dp"
-                        #pos_hint: {'right': 1}
+                        #size_hint_x: None
+                        #width: "95dp"
 
                         MDIconButton:
                             icon: "history"
@@ -511,16 +548,17 @@
                             icon_color: (45/255, 64/255, 230/255, 1)
                             icon_size: "16sp"
                             pos_hint: {'center_y': 0.5}
+                            on_release: root.show_history_screen() 
+                            padding: [0, 0, '-20dp', 0]      
 
-                        Button:
+                        MDTextButton:
                             text: "Ver historial"
                             font_size: "12sp"
                             font_name: "./Fuentes/Nunito-SemiBold.ttf"
                             color: 19/255, 27/255, 197/255, 1 
-                            background_color: 0, 0, 0, 0
-                            borderless: True
                             pos_hint: {'center_y': 0.5}
-                            on_release: root.show_new_account_screen()
+                            on_release: root.show_history_screen()
+#Podria optimizar mi codigo usando el MDTextButton, para Regístrate e Inicia Session en Login y Registrar             
 
                 GridLayout:
                     cols: 2
@@ -578,34 +616,241 @@
                         #padding: ["25dp", 0, 0, "20dp"]
                         pos_hint: {'center_x': 0.31, 'center_y': 0.5}
 
+#INICIO PANEL INFERIOR
+        MenuInferior:
+            manager: root.manager
+#FIN PANEL INFERIOR
+
+
 <HistorialCard@MDCard>:
-    titulo_h_card: ' '
-    valor_h_signo: ' '
-    rango: ' '
-    estado: ' '
-    orientation: "vertical"
-    size: "170dp", "200dp"
+    egd: ' '
+    spo2: ' '
+    temp: ' '
+    giro: ' '
+    orientation: "horizontal"
+    size: 1, "100dp"
     elevation: 0.6
-    md_bg_color: 242/255, 242/255, 242/255, 1
-    size_hint: 0.01, None
+    md_bg_color: 1, 1, 1, 1
+    size_hint: 1, None
     
     BoxLayout:
         orientation: 'vertical'
 
-        MDLabel:
-            id: titulo_card
-            text: root.titulo_card
-            halign: "center"
-            font_name: './Fuentes/Inter-Medium.ttf'
-            font_size: "15dp"
-            color: 0, 0, 0, 1
+        BoxLayout:
+            orientation: 'horizontal'
 
-<HisotryScreen>:
+            Label:
+                text: "Estado Promedio:"
+                font_size: "15sp"
+                font_name: "./Fuentes/Inter-Medium.ttf"
+                color: (0, 0, 0, 1)  # Color Negro
+                halign: 'left'
+                text_size: self.width, None
+                padding: ["12dp", 0, 0, 0]
+                size_hint_x: 0.45
+        
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_x: 0.30
+
+                MDIcon:
+                    id: estado_prom
+                    icon: 'circle'
+                    font_size: "15sp"
+                    pos_hint: {'center_y': 0.5}
+                    padding: [0, 0, '7dp', 0]
+                    
+                    
+                Label:
+                    text: "Normal"
+                    font_size: "14sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (0, 0, 0, 1)  # Color Negro
+                    halign: 'left'
+                    text_size: self.width, None
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_x: 0.25
+                pos_hint: {'center_y': 0.55}
+
+                Label:
+                    text: 'Fecha: 12-12-1212'
+                    font_size: "10sp"
+                    font_name: "./Fuentes/Inter-Medium.ttf"
+                    color: (0, 0, 0, 0.7)  # Color Negro
+                    halign: 'left'
+                    text_size: self.width, self.height
+
+                Label:
+                    text: 'Hora: 22:22'
+                    font_size: "10sp"
+                    font_name: "./Fuentes/Inter-Medium.ttf"
+                    color: (0, 0, 0, 0.7)  # Color Negro
+                    halign: 'left'
+                    text_size: self.width, None
+        BoxLayout:
+            orientation: 'horizontal'
+            
+            FloatLayout: #EGD
+                orientation: 'vertical'
+
+                canvas.before:
+                    Color:
+                        rgba: (9/255, 61/255, 119/255, 1)  # Color #2E37F5 
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [0, 0, 0, 20]
+                
+                Label:
+                    text: 'EGD'
+                    font_size: "13sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (1, 1, 1, 1)
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.8}
+
+                Image:
+                    source: './Iconos/icon_pulse.png' 
+                    size_hint: 0.35, 0.35
+                    pos_hint: {'center_x': 0.2, 'center_y': 0.37}
+
+                Label:
+                    id: estado_pulso
+                    text: "36" 
+                    font_size: "13sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (1, 1, 1, 1) 
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+                    padding: [0, 0, '5dp', 0]
+
+                Label:
+                    text: "rpm" 
+                    font_size: "10sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (1, 1, 1, 1)
+                    pos_hint: {'center_x': 0.7, 'center_y': 0.37}
+                    
+
+            FloatLayout: #SpO2
+                orientation: 'vertical'
+
+                canvas.before:
+                    Color:
+                        rgba: (58/255, 124/255, 165/255, 1)  # Color #2E37F5 
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                Label:
+                    text: 'SpO2'
+                    font_size: "13sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (1, 1, 1, 1)
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.8}
+
+                Image:
+                    source: './Iconos/icon_SpO2.png' 
+                    size_hint: 0.35, 0.35
+                    pos_hint: {'center_x': 0.2, 'center_y': 0.37}
+
+                Label:
+                    id: estado_spo2
+                    text: "36" 
+                    font_size: "13sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (1, 1, 1, 1) 
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.38}
+
+                Label:
+                    text: "%" 
+                    font_size: "10sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (1, 1, 1, 1)
+                    pos_hint: {'center_x': 0.68, 'center_y': 0.36}
+                
+
+            FloatLayout: #Temp
+                orientation: 'vertical'
+
+                canvas.before:
+                    Color:
+                        rgba: 9/255, 61/255, 119/255, 1  # Color #2E37F5 
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+
+                Label:
+                    text: 'Temp'
+                    font_size: "13sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (1, 1, 1, 1)
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.8}
+
+                Image:
+                    source: './Iconos/icon_temp.png' 
+                    size_hint: 0.35, 0.35
+                    pos_hint: {'center_x': 0.2, 'center_y': 0.37}
+
+                Label:
+                    id: estado_temp
+                    text: "36" 
+                    font_size: "13sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (1, 1, 1, 1) 
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.38}
+
+                Label:
+                    text: "°C" 
+                    font_size: "10sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (1, 1, 1, 1)
+                    pos_hint: {'center_x': 0.68, 'center_y': 0.36}
+                
+            FloatLayout: #Giro
+                orientation: 'vertical'
+
+                canvas.before:
+                    Color:
+                        rgba: (58/255, 124/255, 165/255, 1)  # Color #2E37F5 
+                    RoundedRectangle:
+                        pos: self.pos
+                        size: self.size
+                        radius: [0, 0, 20, 0]
+
+                Label:
+                    text: 'Giro'
+                    font_size: "13sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (1, 1, 1, 1)
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.8}
+
+                Image:
+                    source: './Iconos/icon_giro.png' 
+                    size_hint: 0.35, 0.35
+                    pos_hint: {'center_x': 0.2, 'center_y': 0.37}
+
+                Label:
+                    id: estado_pulso
+                    text: "36" 
+                    font_size: "13sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (1, 1, 1, 1) 
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.38}
+
+                Label:
+                    text: "°/s" 
+                    font_size: "10sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (1, 1, 1, 1)
+                    pos_hint: {'center_x': 0.68, 'center_y': 0.36}
+                
+<HistoryScreen>:
     BoxLayout: 
         orientation: 'vertical'
 
-#INICIO PANEL SUPERIOR hISTORIAL SCREEN
-        BoxLayout: 
+#INICIO PANEL SUPERIOR HISTORIAL SCREEN
+        FloatLayout: 
             orientation: 'horizontal'
             size_hint: 1, 0.144
             pos_hint: {'center_x': 0.5, 'top': 1}
@@ -616,60 +861,47 @@
                 Rectangle:
                     pos: self.pos
                     size: self.size
-
+            
+            MDIconButton:
+                icon: "chevron-left" 
+                pos_hint: {'center_y': 0.5}
+                on_press: root.show_app_screen()
+                theme_text_color: 'Custom'
+                icon_color: 1, 1, 1, 1
+            
             Image:
                 source: './Logos/X4.png' 
                 size_hint: None, None
-                pos_hint: {'center_x': 0.5}
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 #FIN PANEL SUPERIOR HISTORIAL SCREEN
 
-#INICIO PANEL INFERIOR
-        BoxLayout:
-            orientation: 'horizontal'
-            size_hint: 1, 0.1
-            pos_hint: {'center_x': 0.5, 'bottom': 1}
+        MDScrollView:
+            do_scroll_x: False
+            effect_cls: 'ScrollEffect'
+            scroll_type: ['content']
+            size_hint: 1, 1
 
-            canvas.before:
-                Color:
-                    rgba: (45/255, 64/255, 230/255, 1)  # Color #2E37F5 
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
 
-            MDIconButton:
-                icon: "home"
-                theme_icon_color: "Custom"
-                icon_color: (0.949, 0.949, 0.949, 1)
-                icon_size: "40sp"
-                pos_hint: {'center_y': 0.5}
-                size_hint_x: 1
-                #on_release: app.root.get_screen('app_screen').log_out()
+                GridLayout:
+                    cols: 1
+                    padding: ["13dp", "13dp", "13dp", "13dp"]
+                    #spacing: "25dp"
+                    size_hint_y: None
+                    height: self.minimum_height
 
-            MDIconButton:
-                icon: "history" #clipboard-text-clock-outline
-                theme_icon_color: "Custom"
-                icon_color: (0.949, 0.949, 0.949, 1)
-                icon_size: "40sp"
-                pos_hint: {'center_y': 0.5}
-                size_hint_x: 1
-                #on_release: app.root.get_screen('app_screen').log_out()
+                    HistorialCard:
+                        titulo_card: "Frecuencia Cardíaca (Bpm)"
+                        valor_signo: "99"
+                        rango: "Rango"
+                        estado: "Estado"
 
-            MDIconButton:
-                icon: "heart-cog-outline" #account-alert-outline
-                theme_icon_color: "Custom"
-                icon_color: (0.949, 0.949, 0.949, 1)
-                icon_size: "40sp"
-                pos_hint: {'center_y': 0.5}
-                size_hint_x: 1
-                #on_release: app.root.get_screen('app_screen').log_out()
+#INICIO MENU INFERIOR
+        MenuInferior:
+            manager: root.manager
+#FIN MENU INFERIOR
 
-            MDIconButton:
-                icon: "account-circle-outline"
-                theme_icon_color: "Custom"
-                icon_color: (0.949, 0.949, 0.949, 1)
-                icon_size: "40sp"
-                pos_hint: {'center_y': 0.5}
-                size_hint_x: 1
-                #on_release: app.root.get_screen('app_screen').log_out()
 
-#FIN PANEL INFERIOR

@@ -132,10 +132,25 @@ class AppScreen(MDScreen):
         self.manager.current = "login_screen"
 
     def show_history_screen(self): # Método para cerrar sesión
-        self.manager.transition.direction = 'right'
+        self.manager.transition.direction = 'left'
         self.manager.current = "history_screen"
 
 class HistoryScreen(MDScreen):
+
+   def show_app_screen(self): # Método para cerrar sesión
+        self.manager.transition.direction = 'right'
+        self.manager.current = "app_screen"
+
+class MenuInferior(BoxLayout):
+    def show_app_screen(self): # Método para cerrar sesión
+        self.manager.transition.direction = 'right'
+        self.manager.current = "app_screen"
+
+    def show_history_screen(self): # Método para cerrar sesión
+        self.manager.transition.direction = 'left'
+        self.manager.current = "history_screen"
+
+class SignosCard(MDCard):
     pass
 
 class MainApp(MDApp):
@@ -149,8 +164,8 @@ class MainApp(MDApp):
         if platform != 'android':
             #Window.size = (450, 1000) #2.2
             #Window.size = (540, 1200) #Mitad escala
-            #Window.size = (414, 600) #736
-            Window.size = (360, 700)
+            Window.size = (414, 600) #736
+            #Window.size = (360, 700)
             
 
         self.manager = MDScreenManager()
@@ -159,7 +174,7 @@ class MainApp(MDApp):
         self.manager.add_widget(NewAccountScreen(name='new_account_screen'))
         self.manager.add_widget(HistoryScreen(name='history_screen'))
 
-        self.manager.current = "app_screen"
+        self.manager.current = "history_screen"
 
         return self.manager
 
@@ -168,9 +183,13 @@ class MainApp(MDApp):
         self.manager.current = 'new_account_screen'
         #self.dialog.dismiss()
 
-    def show_new_account_screen(self):
-        self.manager.transition.direction = 'left'
-        self.manager.current = 'history_screen'
+    # def show_app_screen(self): # Método para cerrar sesión
+    #     self.manager.transition.direction = 'left'
+    #     self.manager.current = "app_screen"
+
+    # def show_history_screen(self): # Método para cerrar sesión
+    #     self.manager.transition.direction = 'left'
+    #     self.manager.current = "history_screen"
 
     def get_screen_instance(self, screen):
         return self.root.get_screen(screen)
