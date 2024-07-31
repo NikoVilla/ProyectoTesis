@@ -88,7 +88,8 @@ void loop() {
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth no está habilitado! Por favor, ejecuta `make menuconfig` para habilitarlo
 #endif
-
+ 
+ 
 BluetoothSerial SerialBT;
 
 int Led = 33; // El pin del LED en el ESP32-CAM es generalmente el 33

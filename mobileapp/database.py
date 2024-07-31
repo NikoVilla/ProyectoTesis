@@ -38,11 +38,16 @@ class Database:
 
     def create_books_table(self):
         self.cursor.execute(
-            "CREATE TABLE IF NOT EXISTS libros(id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT NOT NULL, autor TEXT NOT NULL, fecha TEXT NOT NULL, precio REAL NOT NULL, categoria TEXT NOT NULL, descripcion TEXT NOT NULL, idioma TEXT NOT NULL)")
+            "CREATE TABLE IF NOT EXISTS libros(id INTEGER PRIMARY KEY AUTOINCREMENT, egd TEXT NOT NULL, spo2 TEXT NOT NULL, temp TEXT NOT NULL, giro REAL NOT NULL, estado TEXT NOT NULL, fecha TEXT NOT NULL, hora TEXT NOT NULL)")
         self.con.commit()
 
-    def inserts_books_by_default(self):
-        books = [
+    def create_history_table(self):
+        self.cursor.execute(
+            "CREATE TABLE IF NOT EXISTS registros(id INTEGER PRIMARY KEY AUTOINCREMENT, titulo TEXT NOT NULL, autor TEXT NOT NULL, fecha TEXT NOT NULL, precio REAL NOT NULL, categoria TEXT NOT NULL, descripcion TEXT NOT NULL, idioma TEXT NOT NULL)")
+        self.con.commit()
+
+    def inserts_registros_by_default(self):
+        registros = [
             {
                 "titulo": "Don Quijote",
                 "autor": "Miguel de Cervantes",
@@ -51,75 +56,12 @@ class Database:
                 "categoria": "Novela",
                 "descripcion": "Don Quijote de la Mancha es una novela que satiriza las novelas de caballería y la sociedad de la época.",
                 "idioma": "Español"
-            },
-            {
-                "titulo": "Cien años de soledad",
-                "autor": "Gabriel García Márquez",
-                "fecha": datetime(1967, 1, 1),
-                "precio": 18000,
-                "categoria": "Realismo mágico",
-                "descripcion": "Cien años de soledad es una novela que explora la historia de la familia Buendía en el pueblo ficticio de Macondo.",
-                "idioma": "Español"
-            },
-            {
-                "titulo": "El señor de los anillos",
-                "autor": "J.R.R. Tolkien",
-                "fecha": datetime(1954, 1, 1),
-                "precio": 22000,
-                "categoria": "Fantasía",
-                "descripcion": "El señor de los anillos es una trilogía épica que sigue la búsqueda de un anillo para destruir el mal en la Tierra Media.",
-                "idioma": "Inglés"
-            },
-            {
-                "titulo": "El código Da Vinci",
-                "autor": "Dan Brown",
-                "fecha": datetime(2003, 1, 1),
-                "precio": 19000,
-                "categoria": "Thriller",
-                "descripcion": "El código Da Vinci es un thriller que sigue al profesor Robert Langdon en una búsqueda de secretos ocultos en obras de arte.",
-                "idioma": "Inglés"
-            },
-            {
-                "titulo": "Harry Potter y la piedra filosofal",
-                "autor": "J.K. Rowling",
-                "fecha": datetime(1997, 1, 1),
-                "precio": 25000,
-                "categoria": "Fantasía",
-                "descripcion": "La primera entrega de la serie Harry Potter sigue las aventuras del joven mago Harry en Hogwarts.",
-                "idioma": "Inglés"
-            },
-            {
-                "titulo": "El retrato de Dorian Gray",
-                "autor": "Oscar Wilde",
-                "fecha": datetime(1890, 1, 1),
-                "precio": 17000,
-                "categoria": "Novela gótica",
-                "descripcion": "El retrato de Dorian Gray es una novela que explora la moralidad y la decadencia a través del retrato envejeciente de un hombre.",
-                "idioma": "Inglés"
-            },
-            {
-                "titulo": "El perfume",
-                "autor": "Patrick Süskind",
-                "fecha": datetime(1985, 1, 1),
-                "precio": 20000,
-                "categoria": "Novela histórica",
-                "descripcion": "El perfume sigue la vida de Jean-Baptiste Grenouille, un asesino obsesionado con el sentido del olfato.",
-                "idioma": "Alemán"
-            },
-            {
-                "titulo": "El alquimista",
-                "autor": "Paulo Coelho",
-                "fecha": datetime(1988, 1, 1),
-                "precio": 16000,
-                "categoria": "Novela filosófica",
-                "descripcion": "El alquimista narra el viaje de Santiago en busca de su tesoro personal y la realización de sus sueños.",
-                "idioma": "Portugués"
             }
         ]
 
-        for book in books:
-            self.cursor.execute("INSERT INTO libros (titulo, autor, fecha, precio, categoria, descripcion, idioma) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                                (book["titulo"], book["autor"], book["fecha"], book["precio"], book["categoria"], book["descripcion"], book["idioma"]))
+        for registro in registros:
+            self.cursor.execute("INSERT INTO registros (egd, spo2, temp, giro, estado, fecha, hora) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                                (registro["titulo"], registro["autor"], registro["fecha"], registro["precio"], registro["categoria"], registro["descripcion"], book["idioma"]))
 
             self.con.commit()
 
