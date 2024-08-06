@@ -29,6 +29,10 @@ from kivymd.uix.button import MDFlatButton, MDRectangleFlatButton, MDIconButton
 from kivymd.uix.widget import MDWidget
 from kivymd.uix.scrollview import MDScrollView
 from kivymd.uix.imagelist.imagelist import MDSmartTile
+from kivy.lang import Builder
+from kivy.uix.popup import Popup
+from bleak import BleakClient, discover
+
 # ---
 
 from kivymd.uix.screenmanager import MDScreenManager
@@ -131,17 +135,22 @@ class AppScreen(MDScreen):
         self.manager.transition.direction = 'right'
         self.manager.current = "login_screen"
 
-    def show_history_screen(self): # Método para cerrar sesión
+    def show_history_screen(self):
         self.manager.transition.direction = 'left'
         self.manager.current = "history_screen"
 
+    def show_devices_screen(self): 
+        self.manager.transition.direction = 'left'
+        self.manager.current = "devices_screen"
+
 class HistoryScreen(MDScreen):
 
-   def show_app_screen(self): # Método para cerrar sesión
+    def show_app_screen(self): # Método para cerrar sesión
         self.manager.transition.direction = 'right'
         self.manager.current = "app_screen"
+    
 
-class MenuInferior(BoxLayout):
+class BottomPanel(BoxLayout):
     def show_app_screen(self): # Método para cerrar sesión
         self.manager.transition.direction = 'right'
         self.manager.current = "app_screen"
@@ -150,11 +159,28 @@ class MenuInferior(BoxLayout):
         self.manager.transition.direction = 'left'
         self.manager.current = "history_screen"
 
+    def show_devices_screen(self): # Método para cerrar sesión
+        self.manager.transition.direction = 'right'
+        self.manager.current = "devices_screen"
+
+class TopPanel(BoxLayout):
+    def show_app_screen(self):
+        self.manager.transition.direction = 'right'
+        self.manager.current = "app_screen"
+
+class DevicesScreen(MDScreen):
+    # def show_app_screen(self):
+    #     self.manager.transition.direction = 'right'
+    #     self.manager.current = "app_screen"
+    pass
+
 class SignosCard(MDCard):
     pass
 
 class MainApp(MDApp):
     dialog = None
+    device_list = []
+    client = None
 
     def build(self):
         self.theme_cls.theme_style = "Light"
@@ -164,7 +190,7 @@ class MainApp(MDApp):
         if platform != 'android':
             #Window.size = (450, 1000) #2.2
             #Window.size = (540, 1200) #Mitad escala
-            Window.size = (414, 600) #736
+            Window.size = (414, 736) #736
             #Window.size = (360, 700)
             
 
@@ -173,8 +199,10 @@ class MainApp(MDApp):
         self.manager.add_widget(AppScreen(name='app_screen'))
         self.manager.add_widget(NewAccountScreen(name='new_account_screen'))
         self.manager.add_widget(HistoryScreen(name='history_screen'))
+        self.manager.add_widget(DevicesScreen(name='devices_screen'))
 
-        self.manager.current = "history_screen"
+
+        self.manager.current = "devices_screen"
 
         return self.manager
 
@@ -193,6 +221,49 @@ class MainApp(MDApp):
 
     def get_screen_instance(self, screen):
         return self.root.get_screen(screen)
+    
+    def on_start(self):
+        # escaneo de dispositivos Bluetooth al iniciar la aplicación
+        Clock.schedule_once(self.start_bluetooth_scan, 1)
+
+    async def start_bluetooth_scan(self, *args):
+        devices = await discover()
+        self.device_list = devices
+        self.update_device_list()
+
+    def update_device_list(self):
+        list_view = self.root.get_screen('app_screen').ids.device_list
+        list_view.clear_widgets()
+        for device in self.device_list:
+            list_view.add_widget(DeviceListItem(device, on_release=self.on_device_select))
+
+    async def connect_to_device(self, address):
+        self.client = BleakClient(address)
+        try:
+            await self.client.connect()
+            self.root.get_screen('app_screen').ids.status_label.text = f"Conectado a {address}"
+        except Exception as e:
+            self.root.get_screen('app_screen').ids.status_label.text = "Desconectado"
+            print(f"Error conectando al dispositivo: {e}")
+
+    def on_device_select(self, instance):
+        address = instance.device.address
+        Clock.schedule_async(self.connect_to_device, address)
+
+class DeviceListItem(BoxLayout):
+    def __init__(self, device, **kwargs):
+        super().__init__(**kwargs)
+        self.device = device
+        self.orientation = 'horizontal'
+        self.size_hint_y = None
+        self.height = '50dp'
+
+        self.add_widget(Label(text=device.name, size_hint_x=0.8))
+        self.add_widget(Button(text='Conectar', on_release=self.on_connect))
+
+    def on_connect(self, instance):
+        app = MDApp.get_running_app()
+        app.on_device_select(self)
 
 MainApp().run()
 

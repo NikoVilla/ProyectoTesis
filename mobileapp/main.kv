@@ -313,8 +313,36 @@
                         halign: 'left'
                         text_size: self.width, None
 
-# ALGO
-<MenuInferior>:
+<TopPanel>:
+    orientation: 'horizontal'
+    size_hint: 1, 0.144
+    pos_hint: {'center_x': 0.5, 'top': 1}
+
+    canvas.before:
+        Color:
+            rgba: (45/255, 64/255, 230/255, 1)  # Color #2E37F5 
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    
+    MDIconButton:
+        icon: "chevron-left" 
+        pos_hint: {'center_y': 0.5}
+        on_press: root.show_app_screen()
+        theme_text_color: 'Custom'
+        icon_color: 1, 1, 1, 1
+    
+    FloatLayout:
+        size_hint: 1, 1
+
+        Image:
+            source: './Logos/X4.png' 
+            size_hint: 0.87, 0.87
+            size: self.texture_size
+            pos_hint: {'center_x': 0.45, 'center_y': 0.5} 
+            center: self.parent.center
+
+<BottomPanel>:
     orientation: 'horizontal'
     size_hint: 1, 0.1
     pos_hint: {'center_x': 0.5, 'bottom': 1}
@@ -334,6 +362,15 @@
         pos_hint: {'center_y': 0.5}
         size_hint_x: 1
         on_release: root.show_app_screen()
+
+    MDIconButton:
+        icon: "bluetooth"
+        theme_icon_color: "Custom"
+        icon_color: (0.949, 0.949, 0.949, 1)
+        icon_size: "40sp"
+        pos_hint: {'center_y': 0.5}
+        size_hint_x: 1
+        on_release: root.show_devices_screen()
 
     MDIconButton:
         icon: "history" #clipboard-text-clock-outline
@@ -362,7 +399,126 @@
         size_hint_x: 1
         #on_release: root.show_history_screen()
 
+<DevicesScreen>
+    BoxLayout: 
+        orientation: 'vertical'
 
+        TopPanel:
+            manager: root.manager
+
+        MDScrollView:
+            do_scroll_x: False
+            effect_cls: 'ScrollEffect'
+            scroll_type: ['content']
+            size_hint: 1, 1
+
+            BoxLayout:
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+
+                Label:
+                    text: "Dispositivos Bluetooth"
+                    font_size: "25sp"
+                    font_name: "./Fuentes/Inter-SemiBold.ttf"
+                    color: (0, 0, 0, 1)  # Color F2F2F2 
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                    halign: 'left'
+                    valign: 'top'
+                    text_size: self.width, None
+                    padding: ["25dp", "15dp", 0, "22dp"] #izq, top, der, inf
+
+                MDList:
+                    id: device_list
+                    size_hint_y: None
+                    height: self.minimum_height
+
+                # BoxLayout:
+                #     orientation: 'horizontal'
+                #     size_hint_y: None
+                #     height: "50dp"
+                #     padding: ["10dp", "10dp", "10dp", "10dp"]
+
+                #     MDRaisedButton:
+                #         text: "Agregar"
+                #         size_hint_x: None
+                #         width: "200dp"
+                #         on_release: app.open_device_popup()
+
+                #     # Rectángulo con el estado del dispositivo conectado
+                #     BoxLayout:
+                #         orientation: 'vertical'
+                #         size_hint_y: None
+                #         height: self.minimum_height
+
+                #         # Sección para el estado del dispositivo
+                #         BoxLayout:
+                #             orientation: 'horizontal'
+                #             size_hint_x: 0.8
+                #             padding: "10dp"
+
+                #             canvas.before:
+                #                 Color:
+                #                     rgba: 0, 1, 0, 1 #if app.client and app.client.is_connected else 0.5, 0.5, 0.5, 1
+                #                 Rectangle:
+                #                     pos: self.pos
+                #                     size: self.size
+
+                #             Label:
+                #                 id: device_status
+                #                 text: "No conectado"
+                #                 font_size: "20sp"
+                #                 font_name: "./Fuentes/Inter-Medium.ttf"
+                #                 color: (1, 1, 1, 1)
+                #                 size_hint_y: None
+                #                 height: self.texture_size[1]
+
+                    BoxLayout:
+                        orientation: 'vertical'
+                        size_hint_y: None
+                        height: self.minimum_height
+                        Label:
+                            text: "Batería Dispositivo"
+                            font_size: "25sp"
+                            font_name: "./Fuentes/Inter-SemiBold.ttf"
+                            color: (0, 0, 0, 1)  # Color F2F2F2 
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            halign: 'left'
+                            text_size: self.width, None
+                            padding: ["25dp", "13dp", 0, "20dp"] #izq, top, der, inf
+
+                        MDCard:
+                            orientation: "vertical"
+                            elevation: 0.6
+                            md_bg_color: 242/255, 242/255, 242/255, 1
+                            size_hint: 0.45, None
+                            padding: [0, 0, 0, "7dp"]
+                            pos_hint: {'center_x': 0.28, 'center_y': 0.5}
+
+                            BoxLayout:
+                                orientation: 'vertical'
+                                #padding: ["40dp", 0, 0, 0]
+
+                                MDLabel:
+                                    text: "Nivel de batería"
+                                    font_name: './Fuentes/Inter-Medium.ttf'
+                                    font_size: "16sp"
+                                    halign: "center"
+                                    color: 0, 0, 0, 1
+
+                                MDLabel:
+                                    text: "99%"
+                                    font_name: './Fuentes/Inter-Medium.ttf'
+                                    font_size: "30sp"
+                                    halign: "left"
+                                    color: 0, 0, 0, 1
+                                    halign: "center"
+
+                        
+        BottomPanel:
+            manager: root.manager
 
 <SignosCard>:
     titulo_card: ' '
@@ -415,7 +571,7 @@
     BoxLayout: 
         orientation: 'vertical'
 
-#INICIO PANEL SUPERIOR
+        #INICIO PANEL SUPERIOR
         BoxLayout: 
             orientation: 'horizontal'
             size_hint: 1, 0.2
@@ -457,7 +613,7 @@
                     height: self.minimum_height
                     Label:
                         text: "Bienvenido de nuevo"
-                        font_size: "15sp"
+                        font_size: "17sp"
                         font_name: "./Fuentes/Inter-Medium.ttf"
                         color: (233/255, 233/255, 233/255, 1)  # Color E9E9E9 
                         halign: 'left'
@@ -465,8 +621,8 @@
                         height: self.texture_size[1]
                         text_size: self.width, None
                     Label:
-                        text: "Nicolas Villanueva"
-                        font_size: "20sp"
+                        text: "Nicolás Villanueva"
+                        font_size: "22sp"
                         font_name: "./Fuentes/Inter-SemiBold.ttf"
                         color: (0.949, 0.949, 0.949, 1)  # Color F2F2F2 
                         halign: 'left'
@@ -493,11 +649,10 @@
                     font_size: "15sp"
                     font_name: "./Fuentes/Inter-Medium.ttf"
                     color: (0.949, 0.949, 0.949, 1)  # Color F2F2F2 
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    
-#FIN PANEL SUPERIOR
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}            
+        #FIN PANEL SUPERIOR
 
-#CONTENIDO                
+        #CONTENIDO                
         MDScrollView:
             do_scroll_x: False
             effect_cls: 'ScrollEffect'
@@ -508,6 +663,7 @@
                 orientation: 'vertical'
                 size_hint_y: None
                 height: self.minimum_height
+
                 Label:
                     text: "Signos vitales"
                     font_size: "25sp"
@@ -558,7 +714,7 @@
                             color: 19/255, 27/255, 197/255, 1 
                             pos_hint: {'center_y': 0.5}
                             on_release: root.show_history_screen()
-#Podria optimizar mi codigo usando el MDTextButton, para Regístrate e Inicia Session en Login y Registrar             
+                            #Podria optimizar mi codigo usando el MDTextButton, para Regístrate e Inicia Session en Login y Registrar             
 
                 GridLayout:
                     cols: 2
@@ -591,36 +747,8 @@
                         valor_signo: "99"
                         rango: "Rango"
                         estado: "Estado"
-
-                BoxLayout:
-                    orientation: 'vertical'
-                    size_hint_y: None
-                    height: self.minimum_height
-                    Label:
-                        text: "Batería Dispositivo"
-                        font_size: "25sp"
-                        font_name: "./Fuentes/Inter-SemiBold.ttf"
-                        color: (0, 0, 0, 1)  # Color F2F2F2 
-                        size_hint_y: None
-                        height: self.texture_size[1]
-                        halign: 'left'
-                        text_size: self.width, None
-                        padding: ["25dp", "13dp", 0, "20dp"] #izq, top, der, inf
-
-                    MDCard:
-                        orientation: "horizontal"
-                        size: "170dp", "60dp"
-                        elevation: 0.6
-                        md_bg_color: 242/255, 242/255, 242/255, 1
-                        size_hint: 0.5, None
-                        #padding: ["25dp", 0, 0, "20dp"]
-                        pos_hint: {'center_x': 0.31, 'center_y': 0.5}
-
-#INICIO PANEL INFERIOR
-        MenuInferior:
+        BottomPanel:
             manager: root.manager
-#FIN PANEL INFERIOR
-
 
 <HistorialCard@MDCard>:
     egd: ' '
@@ -658,9 +786,8 @@
                     icon: 'circle'
                     font_size: "15sp"
                     pos_hint: {'center_y': 0.5}
-                    padding: [0, 0, '7dp', 0]
-                    
-                    
+                    padding: [0, 0, "7dp", 0]
+
                 Label:
                     text: "Normal"
                     font_size: "14sp"
@@ -769,7 +896,6 @@
                     color: (1, 1, 1, 1)
                     pos_hint: {'center_x': 0.68, 'center_y': 0.36}
                 
-
             FloatLayout: #Temp
                 orientation: 'vertical'
 
@@ -848,32 +974,10 @@
 <HistoryScreen>:
     BoxLayout: 
         orientation: 'vertical'
-
-#INICIO PANEL SUPERIOR HISTORIAL SCREEN
-        FloatLayout: 
-            orientation: 'horizontal'
-            size_hint: 1, 0.144
-            pos_hint: {'center_x': 0.5, 'top': 1}
-
-            canvas.before:
-                Color:
-                    rgba: (45/255, 64/255, 230/255, 1)  # Color #2E37F5 
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-            
-            MDIconButton:
-                icon: "chevron-left" 
-                pos_hint: {'center_y': 0.5}
-                on_press: root.show_app_screen()
-                theme_text_color: 'Custom'
-                icon_color: 1, 1, 1, 1
-            
-            Image:
-                source: './Logos/X4.png' 
-                size_hint: None, None
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-#FIN PANEL SUPERIOR HISTORIAL SCREEN
+                
+        TopPanel:
+            id: top_panel
+            manager: root.manager
 
         MDScrollView:
             do_scroll_x: False
@@ -898,10 +1002,8 @@
                         valor_signo: "99"
                         rango: "Rango"
                         estado: "Estado"
-
-#INICIO MENU INFERIOR
-        MenuInferior:
+        BottomPanel:
             manager: root.manager
-#FIN MENU INFERIOR
+
 
 
