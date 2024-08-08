@@ -2,7 +2,7 @@
 from daatabase1 import Database
 from kivy.core.window import Window
 from kivy.utils import platform
-from kivy.properties import StringProperty, NumericProperty
+from kivy.properties import StringProperty, NumericProperty, ObjectProperty
 from kivy.clock import Clock
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.pickers import MDDatePicker
@@ -13,8 +13,6 @@ from kivymd.uix.button import MDFlatButton
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.widget import MDWidget
 from kivymd.uix.anchorlayout import MDAnchorLayout
-
-# ---
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.label import Label
@@ -32,15 +30,15 @@ from kivymd.uix.imagelist.imagelist import MDSmartTile
 from kivy.lang import Builder
 from kivy.uix.popup import Popup
 from bleak import BleakClient, discover
-
-# ---
-
 from kivymd.uix.screenmanager import MDScreenManager
+from kivymd.uix.list import MDList, OneLineListItem
 from kivymd.app import MDApp
+from datetime import datetime
 import os
 import sys
-from datetime import datetime
-
+import bluetooth
+import serial 
+import json
 
 if hasattr(sys, '_MEIPASS'):
     os.environ['KIVY_NO_CONSOLELOG'] = '1'
@@ -58,8 +56,6 @@ def validate_empty(*args):
 
     return errors
 
-
-# Clase para la pantalla de inicio de sesión
 class LoginScreen(MDScreen):
     def login(self):
         username = self.ids.user
@@ -89,11 +85,9 @@ class LoginScreen(MDScreen):
         self.manager.transition.direction = 'left'
         self.manager.current = 'new_account_screen'
 
-
-# Clase para la pantalla de creación de nueva cuenta
 class NewAccountScreen(MDScreen):
 
-    def new_account(self): # Método para crear una nueva cuenta de usuario
+    def new_account(self):
         new_username = self.ids.new_user
         new_password = self.ids.new_user_password
 
@@ -119,19 +113,18 @@ class NewAccountScreen(MDScreen):
 
         Clock.schedule_once(lambda dt: (self.show_login_screen(), self.clean()), 2)
 
-    def show_login_screen(self): # Método para mostrar la pantalla de inicio de sesión
+    def show_login_screen(self):
         self.manager.transition.direction = 'right'
         self.manager.current = 'login_screen'
 
-    def clean(self): # Método para limpiar los campos de entrada
+    def clean(self):
         self.ids.new_user.text = ""
         self.ids.new_user_password.text = ""
         self.ids.messages.text = ""
 
-# Clase para la pantalla principal de la aplicación
 class AppScreen(MDScreen):
 
-    def log_out(self): # Método para cerrar sesión
+    def log_out(self):
         self.manager.transition.direction = 'right'
         self.manager.current = "login_screen"
 
@@ -145,21 +138,21 @@ class AppScreen(MDScreen):
 
 class HistoryScreen(MDScreen):
 
-    def show_app_screen(self): # Método para cerrar sesión
+    def show_app_screen(self):
         self.manager.transition.direction = 'right'
         self.manager.current = "app_screen"
     
 
 class BottomPanel(BoxLayout):
-    def show_app_screen(self): # Método para cerrar sesión
+    def show_app_screen(self):
         self.manager.transition.direction = 'right'
         self.manager.current = "app_screen"
 
-    def show_history_screen(self): # Método para cerrar sesión
+    def show_history_screen(self):
         self.manager.transition.direction = 'left'
         self.manager.current = "history_screen"
 
-    def show_devices_screen(self): # Método para cerrar sesión
+    def show_devices_screen(self):
         self.manager.transition.direction = 'right'
         self.manager.current = "devices_screen"
 
@@ -169,18 +162,19 @@ class TopPanel(BoxLayout):
         self.manager.current = "app_screen"
 
 class DevicesScreen(MDScreen):
-    # def show_app_screen(self):
-    #     self.manager.transition.direction = 'right'
-    #     self.manager.current = "app_screen"
-    pass
+   pass
 
 class SignosCard(MDCard):
-    pass
+    titulo_card = StringProperty("")
+    valor_signo = StringProperty("")
+    rango = StringProperty("")
+    estado = StringProperty("")
 
 class MainApp(MDApp):
     dialog = None
     device_list = []
     client = None
+    serial_port = None
 
     def build(self):
         self.theme_cls.theme_style = "Light"
@@ -188,12 +182,9 @@ class MainApp(MDApp):
         self.title = "Sistema de monitoreo de salud"
 
         if platform != 'android':
-            #Window.size = (450, 1000) #2.2
-            #Window.size = (540, 1200) #Mitad escala
-            Window.size = (414, 736) #736
-            #Window.size = (360, 700)
+            Window.size = (414, 736)
+            #COM5 recibe
             
-
         self.manager = MDScreenManager()
         self.manager.add_widget(LoginScreen(name='login_screen'))
         self.manager.add_widget(AppScreen(name='app_screen'))
@@ -201,71 +192,100 @@ class MainApp(MDApp):
         self.manager.add_widget(HistoryScreen(name='history_screen'))
         self.manager.add_widget(DevicesScreen(name='devices_screen'))
 
-
-        self.manager.current = "devices_screen"
+        self.manager.current = "app_screen"
 
         return self.manager
 
     def show_new_account_screen(self):
         self.manager.transition.direction = 'left'
         self.manager.current = 'new_account_screen'
-        #self.dialog.dismiss()
-
-    # def show_app_screen(self): # Método para cerrar sesión
-    #     self.manager.transition.direction = 'left'
-    #     self.manager.current = "app_screen"
-
-    # def show_history_screen(self): # Método para cerrar sesión
-    #     self.manager.transition.direction = 'left'
-    #     self.manager.current = "history_screen"
 
     def get_screen_instance(self, screen):
         return self.root.get_screen(screen)
     
     def on_start(self):
-        # escaneo de dispositivos Bluetooth al iniciar la aplicación
-        Clock.schedule_once(self.start_bluetooth_scan, 1)
+        self.connect_serial_port()
+        #self.list_paired_devices()
+        #self.connect_bluetooth()
 
-    async def start_bluetooth_scan(self, *args):
-        devices = await discover()
-        self.device_list = devices
-        self.update_device_list()
-
-    def update_device_list(self):
-        list_view = self.root.get_screen('app_screen').ids.device_list
-        list_view.clear_widgets()
-        for device in self.device_list:
-            list_view.add_widget(DeviceListItem(device, on_release=self.on_device_select))
-
-    async def connect_to_device(self, address):
-        self.client = BleakClient(address)
+    def connect_serial_port(self):
         try:
-            await self.client.connect()
-            self.root.get_screen('app_screen').ids.status_label.text = f"Conectado a {address}"
-        except Exception as e:
-            self.root.get_screen('app_screen').ids.status_label.text = "Desconectado"
-            print(f"Error conectando al dispositivo: {e}")
+            self.serial_port = serial.Serial('COM5', baudrate=9600, timeout=1)
+            Clock.schedule_interval(self.read_sensor_data, 1)
+        except serial.SerialException as e:
+            print(f"Error connecting to serial port: {e}")
 
-    def on_device_select(self, instance):
-        address = instance.device.address
-        Clock.schedule_async(self.connect_to_device, address)
+    def read_sensor_data(self, dt):
+        try:
+            if self.serial_port.in_waiting > 0:
+                data = self.serial_port.readline().decode('utf-8').strip()
+                if data:
+                    print(f"Received: {data}")
+                    sensor_data = json.loads(data)
+                    sensor1 = sensor_data['randomNumber1']
+                    sensor2 = sensor_data['randomNumber2']
+                    sensor3 = sensor_data['randomNumber3']
+                    sensor4 = sensor_data['randomNumber4']
+                    self.manager.get_screen('app_screen').ids.frecuencia_cardiaca.valor_signo = str(sensor1)
+                    self.manager.get_screen('app_screen').ids.saturacion_oxigeno.valor_signo = str(sensor2)
+                    self.manager.get_screen('app_screen').ids.temperatura_corporal.valor_signo = str(sensor3)
+                    self.manager.get_screen('app_screen').ids.velocidad_angular.valor_signo = str(sensor4)
+                    self.save_data_to_file(data)
+        except serial.SerialException as e:
+            print(f"Error reading from serial port: {e}")
 
-class DeviceListItem(BoxLayout):
-    def __init__(self, device, **kwargs):
-        super().__init__(**kwargs)
-        self.device = device
-        self.orientation = 'horizontal'
-        self.size_hint_y = None
-        self.height = '50dp'
+    def save_data_to_file(self, data):
+        with open("sensor_data.txt", "a") as file:
+            file.write(f"{data}\n")
 
-        self.add_widget(Label(text=device.name, size_hint_x=0.8))
-        self.add_widget(Button(text='Conectar', on_release=self.on_connect))
+    def show_paired_devices(self):
+        devices = bluetooth.discover_devices(duration=2, lookup_names=True, flush_cache=True, lookup_class=False)
+        device_list = MDList()
+        for addr, name in devices:
+            device_list.add_widget(
+                OneLineListItem(text=f"Dispositivo: {name}, Dirección MAC: {addr}")
+            )
+        
+        self.dialog = MDDialog(
+            title="Dispositivos Emparejados",
+            type="custom",
+            content_cls=device_list,
+            buttons=[
+                MDFlatButton(
+                    text="CERRAR",
+                    on_release=lambda x: self.dialog.dismiss()
+                )
+            ]
+        )
+        self.dialog.open()
 
-    def on_connect(self, instance):
-        app = MDApp.get_running_app()
-        app.on_device_select(self)
+#PARA PYBLUEZ
 
-MainApp().run()
+    # def connect_bluetooth(self):
+    #     try:
+    #         self.bt_socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
+    #         self.bt_socket.connect(("0C:B8:15:5A:4D:76", 1))  # Usa la dirección del ESP32_CAM
+    #         Clock.schedule_interval(self.read_sensor_data, 1)
+    #     except bluetooth.btcommon.BluetoothError as err:
+    #         print(f"Error connecting to Bluetooth device: {err}")
+
+    # def read_sensor_data(self, dt):
+    #     try:
+    #         data = self.bt_socket.recv(1024).decode('utf-8')
+    #         self.root.ids.sensor_label.text = f"Sensor Value: {data}"
+    #         self.save_data_to_file(data)
+    #     except bluetooth.btcommon.BluetoothError as err:
+    #         print(f"Error reading from Bluetooth device: {err}")
+
+    # def save_data_to_file(self, data):
+    #     with open("sensor_data.txt", "a") as file:
+    #         file.write(f"{data}\n")
+
+#PARA PYBLUEZ
+
+if __name__ == '__main__':
+    app = MainApp()
+    app.run()
 
 #pybluez para recibir datos desde esp32
 #matplotlib para hacer graficos
