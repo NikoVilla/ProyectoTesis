@@ -1,4 +1,15 @@
-#Pantalla Login
+MDScreenManager:
+    LoginScreen:
+        name: 'login_screen'
+    AppScreen:
+        name: 'app_screen'
+    NewAccountScreen:
+        name: 'new_account_screen'
+    HistoryScreen:
+        name: 'history_screen'
+    DevicesScreen:
+        name: 'devices_screen'
+
 <LoginScreen>:
     BoxLayout: 
         orientation: 'vertical'
@@ -477,7 +488,7 @@
                         size_hint: 0.2, 0.87
                         icon: "swap-horizontal"
                         icon_size: "35dp"
-                        on_release: app.show_paired_devices()
+                        on_release: app.show_loading_dialog()
                         
                         canvas.before:
                             Color:
@@ -734,7 +745,7 @@
                     padding: ["30dp", 0, "60dp", 0]
                         
                     Label:
-                        text: "Última medición:" #+ str(self.root.fecha_hora)
+                        text: "Última medición:" #+ str(self.root.last_fecha_hora)
                         font_size: "12sp"
                         font_name: "./Fuentes/Nunito-SemiBold.ttf"
                         color: 0, 0, 0, 1  # Color Negro

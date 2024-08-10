@@ -11,6 +11,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.screen import MDScreen
+from kivy.uix.floatlayout import FloatLayout
 from kivymd.uix.widget import MDWidget
 from kivymd.uix.anchorlayout import MDAnchorLayout
 from kivy.uix.boxlayout import BoxLayout
@@ -32,7 +33,10 @@ from kivy.uix.popup import Popup
 from bleak import BleakClient, discover
 from kivymd.uix.screenmanager import MDScreenManager
 from kivymd.uix.list import MDList, OneLineListItem
+from kivymd.uix.spinner import MDSpinner
+from kivy.animation import Animation
 from kivymd.app import MDApp
+from threading import Thread
 from datetime import datetime
 import os
 import sys
@@ -124,6 +128,32 @@ class NewAccountScreen(MDScreen):
 
 class AppScreen(MDScreen):
 
+    # serial_port = None
+
+    # def read_sensor_data(self, dt):
+    #     try:
+    #         if self.manager.app.serial_port.in_waiting > 0:
+    #             data = self.manager.app.serial_port.readline().decode('utf-8').strip()
+    #             if data:
+    #                 print(f"Received: {data}")
+    #                 sensor_data = json.loads(data)
+    #                 sensor1 = sensor_data['randomNumber1']
+    #                 sensor2 = sensor_data['randomNumber2']
+    #                 sensor3 = sensor_data['randomNumber3']
+    #                 sensor4 = sensor_data['randomNumber4']
+    #                 self.ids.frecuencia_cardiaca.valor_signo = str(sensor1)
+    #                 self.ids.saturacion_oxigeno.valor_signo = str(sensor2)
+    #                 self.ids.temperatura_corporal.valor_signo = str(sensor3)
+    #                 self.ids.velocidad_angular.valor_signo = str(sensor4)
+    #                 self.save_data_to_file(data)
+    #     except serial.SerialException as e:
+    #         print(f"Error reading from serial port: {e}")
+
+    # def save_data_to_file(self, data):
+    #     with open("sensor_data.txt", "a") as file:
+    #         file.write(f"{data}\n")
+
+
     def log_out(self):
         self.manager.transition.direction = 'right'
         self.manager.current = "login_screen"
@@ -162,8 +192,40 @@ class TopPanel(BoxLayout):
         self.manager.current = "app_screen"
 
 class DevicesScreen(MDScreen):
-   pass
+#     dialog = None
 
+#     def show_loading_dialog(self):
+#         self.dialog = MDDialog(
+#             title="Buscando dispositivos...",
+#             type="custom",
+#             content_cls=MDSpinner(size_hint=(None, None), size=(46, 46)),
+#         )
+#         self.dialog.open()
+#         Thread(target=self.show_paired_devices).start()
+
+#     def show_paired_devices(self):
+#         devices = bluetooth.discover_devices(duration=1, lookup_names=True, flush_cache=True, lookup_class=False)
+#         Clock.schedule_once(lambda dt: self.update_device_list(devices))
+
+#     def update_device_list(self, devices):
+#         device_list = MDList()
+#         for addr, name in devices:
+#             device_list.add_widget(OneLineListItem(text=f"{name}"))
+        
+#         self.dialog.dismiss()
+#         self.dialog = MDDialog(
+#             title="Dispositivos Emparejados",
+#             type="custom",
+#             content_cls=device_list,
+#             buttons=[
+#                 MDFlatButton(
+#                     text="CERRAR",
+#                     on_release=lambda x: self.dialog.dismiss()
+#                 )
+#             ]
+#         )
+#         self.dialog.open()
+    pass
 class SignosCard(MDCard):
     titulo_card = StringProperty("")
     valor_signo = StringProperty("")
@@ -238,14 +300,29 @@ class MainApp(MDApp):
         with open("sensor_data.txt", "a") as file:
             file.write(f"{data}\n")
 
+    def show_loading_dialog(self):
+        self.dialog = MDDialog(
+            title="Buscando dispositivos...",
+            type="custom",
+            content_cls=MDSpinner(
+                size_hint = (None, None),
+                size = (36, 36),
+                color = (45/255, 64/255, 230/255, 1),
+                ),
+        )
+        self.dialog.open()
+        Thread(target=self.show_paired_devices).start()
+
     def show_paired_devices(self):
-        devices = bluetooth.discover_devices(duration=2, lookup_names=True, flush_cache=True, lookup_class=False)
+        devices = bluetooth.discover_devices(duration=1, lookup_names=True, flush_cache=True, lookup_class=False)
+        Clock.schedule_once(lambda dt: self.update_device_list(devices))
+
+    def update_device_list(self, devices):
         device_list = MDList()
         for addr, name in devices:
-            device_list.add_widget(
-                OneLineListItem(text=f"Dispositivo: {name}, Dirección MAC: {addr}")
-            )
+            device_list.add_widget(OneLineListItem(text=f"{name}"))
         
+        self.dialog.dismiss()
         self.dialog = MDDialog(
             title="Dispositivos Emparejados",
             type="custom",
@@ -293,3 +370,10 @@ if __name__ == '__main__':
 #request para para enviar los datos a un API REST en el sw
 #en el sw utilizar lara para crear una API REST que reciba los datos y los almacene en una base de datos MySQL. 
 #luego utilizar lara blade para crear la página web que muestre estos datos.
+
+
+# Comando funcional para .exe
+# pyinstaller --onefile --add-data="main.kv;." --debug=all main.py
+
+
+#token git: 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
