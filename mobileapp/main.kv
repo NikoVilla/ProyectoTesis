@@ -739,44 +739,47 @@ MDScreenManager:
                     text_size: self.width, None
                     padding: ["25dp", "15dp", 0, "22dp"] #izq, top, der, inf
 
-                BoxLayout: #contenedor de ult + ver his
-                    orientation: 'horizontal'
-                    size_hint: 1, 0.5  # Tamaño BoxLayout
-                    padding: ["30dp", 0, "60dp", 0]
-                        
-                    Label:
-                        text: "Última medición:" #+ str(self.root.last_fecha_hora)
-                        font_size: "12sp"
-                        font_name: "./fuentes/Nunito-SemiBold.ttf"
-                        color: 0, 0, 0, 1  # Color Negro
-                        halign: 'left'
-                        valign: 'middle'
-                        text_size: self.width, None
+                GridLayout:
+                    cols: 2
+                    size_hint: 1, 0.5
 
-                    # BoxLayout:
-                    #     size_hint_x: 1
+                    BoxLayout:
+                        size_hint_x: None
+                        width: self.parent.width * 0.5
+                        #pos_hint: {'left': 1}
+                        Label:
+                            text: "Última medición:" #+ str(self.root.last_fecha_hora)
+                            font_size: "12sp"
+                            font_name: "./fuentes/Nunito-SemiBold.ttf"
+                            color: 0, 0, 0, 1 
+                            #valign: 'middle'
+                            #text_size: self.width, None
 
                     BoxLayout:
                         orientation: 'horizontal'
                         size_hint_x: None
+                        width: self.parent.width * 0.5
+                        pos_hint: {'right': 1}
 
-                        MDIconButton:
-                            icon: "history"
-                            theme_icon_color: "Custom"
-                            icon_color: (45/255, 64/255, 230/255, 1)
-                            icon_size: "16sp"
-                            pos_hint: {'center_y': 0.5}
-                            on_release: root.show_history_screen() 
-                            padding: [0, 0, '-20dp', 0]      
+                        BoxLayout:
+                            size_hint_x: 1
+                            pos_hint: {'right': 1}
+                            MDIconButton:
+                                icon: "history"
+                                theme_icon_color: "Custom"
+                                icon_color: (45/255, 64/255, 230/255, 1)
+                                icon_size: "16sp"
+                                pos_hint: {'center_y': 0.5}
+                                on_release: root.show_history_screen() 
+                                #padding: [0, 0, '-20dp', 0]      
 
-                        MDTextButton:
-                            text: "Ver historial"
-                            font_size: "12sp"
-                            font_name: "./fuentes/Nunito-SemiBold.ttf"
-                            color: 19/255, 27/255, 197/255, 1 
-                            pos_hint: {'center_y': 0.5}
-                            on_release: root.show_history_screen()
-                            #Podria optimizar mi codigo usando el MDTextButton, para Regístrate e Inicia Session en Login y Registrar             
+                            MDTextButton:
+                                text: "Ver historial"
+                                font_size: "12sp"
+                                font_name: "./fuentes/Nunito-SemiBold.ttf"
+                                color: 19/255, 27/255, 197/255, 1 
+                                pos_hint: {'center_y': 0.5}
+                                on_release: root.show_history_screen()
 
                 GridLayout:
                     cols: 2

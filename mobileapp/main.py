@@ -1,57 +1,43 @@
-#from img import download_save_images
-from daatabase1 import Database
-from kivy.core.window import Window
-from kivy.utils import platform
-from kivy.properties import StringProperty, NumericProperty, ObjectProperty
-from kivy.clock import Clock
-from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.pickers import MDDatePicker
-from kivymd.uix.card import MDCard
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.dialog import MDDialog
-from kivymd.uix.button import MDFlatButton
-from kivymd.uix.screen import MDScreen
-from kivy.uix.floatlayout import FloatLayout
-from kivymd.uix.widget import MDWidget
-from kivymd.uix.anchorlayout import MDAnchorLayout
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.anchorlayout import AnchorLayout
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-from kivy.uix.image import Image
-from kivy.uix.widget import Widget
-from kivymd.uix.card import MDCard
-from kivymd.uix.textfield import MDTextField
-from kivymd.uix.label import MDLabel
-from kivymd.uix.button import MDFlatButton, MDRectangleFlatButton, MDIconButton
-from kivymd.uix.widget import MDWidget
-from kivymd.uix.scrollview import MDScrollView
-from kivymd.uix.imagelist.imagelist import MDSmartTile
-from kivy.lang import Builder
-from kivy.uix.popup import Popup
-from bleak import BleakClient, discover
-from kivymd.uix.screenmanager import MDScreenManager
-from kivymd.uix.list import MDList, OneLineListItem
-from kivymd.uix.spinner import MDSpinner
-from kivy.animation import Animation
-from kivymd.app import MDApp
-from threading import Thread
-from datetime import datetime
-from jnius import autoclass
-import os
+import os 
 import sys
 import bluetooth
 import serial 
 import json
 import bcrypt
+
+# Variables de entorno
+os.environ['JAVA_HOME'] = 'C:\\Program Files\\Java\\jdk-22'
+os.environ['JDK_HOME'] = 'C:\\Program Files\\Java\\jdk-22'
+os.environ['PATH'] += ';C:\\Program Files\\Java\\jdk-22\\bin;C:\\Program Files\\Java\\jdk-22\\bin\\server'
+
+if hasattr(sys, '_MEIPASS'):
+    os.environ['KIVY_NO_CONSOLELOG'] = '1'
+
+#Biblotecas
+from daatabase1 import Database
+from kivy.core.window import Window
+from kivy.utils import platform
+from kivy.properties import StringProperty
+from kivy.clock import Clock
+from kivy.lang import Builder
+from kivy.uix.boxlayout import BoxLayout
+
+from kivymd.uix.card import MDCard
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.screen import MDScreen
+from kivymd.uix.screenmanager import MDScreenManager
+from kivymd.uix.list import MDList, OneLineListItem
+from kivymd.uix.spinner import MDSpinner
+from kivymd.app import MDApp
+
 from threading import Thread
+from jnius import autoclass
 
 if hasattr(sys, '_MEIPASS'):
     os.environ['KIVY_NO_CONSOLELOG'] = '1'
 
 database = Database()
-
 
 def validate_empty(*args):
     errors = False
@@ -65,8 +51,8 @@ def validate_empty(*args):
 
 class LoginScreen(MDScreen):
     def login(self):
-        username = self.ids.user.text.strip()
-        password = self.ids.password.text.strip()
+        username = self.ids.user
+        password = self.ids.password
 
         empty = validate_empty(username, password)
 
@@ -79,11 +65,7 @@ class LoginScreen(MDScreen):
         if not res['status']:
             self.ids.messages.text = "Usuario inválido o no registrado"
         else:
-            stored_password = res['data'][2].text.strip()
-            print("Password length:", len(password))
-            print("Stored hash length:", len(stored_password))
-            print("Password:", repr(password))
-            print("Stored hash:", repr(stored_password))
+            stored_password = res['data'][2]
             if not bcrypt.checkpw(password.text.encode('utf-8'), stored_password):
                 self.ids.messages.text = "Contraseña incorrecta"
                 password.error = True
@@ -160,7 +142,6 @@ class AppScreen(MDScreen):
     #     with open("sensor_data.txt", "a") as file:
     #         file.write(f"{data}\n")
 
-
     def log_out(self):
         self.manager.transition.direction = 'right'
         self.manager.current = "login_screen"
@@ -179,7 +160,6 @@ class HistoryScreen(MDScreen):
         self.manager.transition.direction = 'right'
         self.manager.current = "app_screen"
     
-
 class BottomPanel(BoxLayout):
     def show_app_screen(self):
         self.manager.transition.direction = 'right'
@@ -261,7 +241,7 @@ class MainApp(MDApp):
         self.manager.add_widget(HistoryScreen(name='history_screen'))
         self.manager.add_widget(DevicesScreen(name='devices_screen'))
 
-        self.manager.current = "new_account_screen"
+        self.manager.current = "app_screen"
 
         return self.manager
 
@@ -273,10 +253,28 @@ class MainApp(MDApp):
         return self.root.get_screen(screen)
     
     def on_start(self):
-        #self.request_permissions()
-        self.connect_serial_port()
+        self.request_permissions()
+        #self.connect_serial_port()
         #self.list_paired_devices()
         #self.connect_bluetooth()
+
+    def request_permissions(self):
+        if platform == 'android':
+            PythonActivity = autoclass('org.kivy.android.PythonActivity')
+            currentActivity = PythonActivity.mActivity
+            ContextCompat = autoclass('androidx.core.content.ContextCompat')
+            ActivityCompat = autoclass('androidx.core.app.ActivityCompat')
+            Manifest = autoclass('android.Manifest')
+            permissions = [
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.NEARBY_DEVICES
+            ]
+            for permission in permissions:
+                if ContextCompat.checkSelfPermission(currentActivity, permission) != 0:
+                    ActivityCompat.requestPermissions(currentActivity, permissions, 1)
 
     def connect_serial_port(self):
         try:
