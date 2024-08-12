@@ -38,11 +38,14 @@ from kivy.animation import Animation
 from kivymd.app import MDApp
 from threading import Thread
 from datetime import datetime
+from jnius import autoclass
 import os
 import sys
 import bluetooth
 import serial 
 import json
+import bcrypt
+from threading import Thread
 
 if hasattr(sys, '_MEIPASS'):
     os.environ['KIVY_NO_CONSOLELOG'] = '1'
@@ -62,8 +65,8 @@ def validate_empty(*args):
 
 class LoginScreen(MDScreen):
     def login(self):
-        username = self.ids.user
-        password = self.ids.password
+        username = self.ids.user.text.strip()
+        password = self.ids.password.text.strip()
 
         empty = validate_empty(username, password)
 
@@ -73,11 +76,15 @@ class LoginScreen(MDScreen):
 
         res = database.get_user(username.text)
 
-        if (res['status'] == False):
-            app_instance = MDApp.get_running_app()
-            self.ids.messages.text = "Usuario invalido o no registrado"
+        if not res['status']:
+            self.ids.messages.text = "Usuario inválido o no registrado"
         else:
-            if (res['data'][2] != password.text):
+            stored_password = res['data'][2].text.strip()
+            print("Password length:", len(password))
+            print("Stored hash length:", len(stored_password))
+            print("Password:", repr(password))
+            print("Stored hash:", repr(stored_password))
+            if not bcrypt.checkpw(password.text.encode('utf-8'), stored_password):
                 self.ids.messages.text = "Contraseña incorrecta"
                 password.error = True
                 return
@@ -90,7 +97,6 @@ class LoginScreen(MDScreen):
         self.manager.current = 'new_account_screen'
 
 class NewAccountScreen(MDScreen):
-
     def new_account(self):
         new_username = self.ids.new_user
         new_password = self.ids.new_user_password
@@ -104,16 +110,17 @@ class NewAccountScreen(MDScreen):
 
         res = database.get_user(new_username.text)
 
-        if (res['status'] == True):
+        if res['status']:
             self.ids.messages.text = "Ya existe una cuenta con este nombre de usuario"
             Clock.schedule_once(lambda dt: self.clean(), 2)
             return
 
-        database.create_user(new_username.text, new_password.text) 
+        hashed_password = bcrypt.hashpw(new_password.text.encode('utf-8'), bcrypt.gensalt())
+        database.create_user(new_username.text, hashed_password)
 
         self.ids.messages.theme_text_color = "Custom"
         self.ids.messages.text_color = "green"
-        self.ids.messages.text = "Cuenta creada con exito"
+        self.ids.messages.text = "Cuenta creada con éxito"
 
         Clock.schedule_once(lambda dt: (self.show_login_screen(), self.clean()), 2)
 
@@ -254,7 +261,7 @@ class MainApp(MDApp):
         self.manager.add_widget(HistoryScreen(name='history_screen'))
         self.manager.add_widget(DevicesScreen(name='devices_screen'))
 
-        self.manager.current = "app_screen"
+        self.manager.current = "new_account_screen"
 
         return self.manager
 
@@ -266,6 +273,7 @@ class MainApp(MDApp):
         return self.root.get_screen(screen)
     
     def on_start(self):
+        #self.request_permissions()
         self.connect_serial_port()
         #self.list_paired_devices()
         #self.connect_bluetooth()
@@ -275,7 +283,7 @@ class MainApp(MDApp):
             self.serial_port = serial.Serial('COM5', baudrate=9600, timeout=1)
             Clock.schedule_interval(self.read_sensor_data, 1)
         except serial.SerialException as e:
-            print(f"Error connecting to serial port: {e}")
+            print(f"Error al leer desde el puerto serie: {e}")
 
     def read_sensor_data(self, dt):
         try:
@@ -294,7 +302,7 @@ class MainApp(MDApp):
                     self.manager.get_screen('app_screen').ids.velocidad_angular.valor_signo = str(sensor4)
                     self.save_data_to_file(data)
         except serial.SerialException as e:
-            print(f"Error reading from serial port: {e}")
+            print(f"Error al leer desde el puerto serie: {e}")
 
     def save_data_to_file(self, data):
         with open("sensor_data.txt", "a") as file:
@@ -377,3 +385,7 @@ if __name__ == '__main__':
 
 
 #token git: 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
+
+#Seguridad
+# pydantic 
+# cryptography 
