@@ -1,56 +1,51 @@
-#from img import download_save_images
-from daatabase1 import Database
-from kivy.core.window import Window
-from kivy.utils import platform
-from kivy.properties import StringProperty, NumericProperty, ObjectProperty
-from kivy.clock import Clock
-from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.pickers import MDDatePicker
-from kivymd.uix.card import MDCard
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.dialog import MDDialog
-from kivymd.uix.button import MDFlatButton
-from kivymd.uix.screen import MDScreen
-from kivy.uix.floatlayout import FloatLayout
-from kivymd.uix.widget import MDWidget
-from kivymd.uix.anchorlayout import MDAnchorLayout
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.anchorlayout import AnchorLayout
-from kivy.uix.label import Label
-from kivy.uix.textinput import TextInput
-from kivy.uix.button import Button
-from kivy.uix.image import Image
-from kivy.uix.widget import Widget
-from kivymd.uix.card import MDCard
-from kivymd.uix.textfield import MDTextField
-from kivymd.uix.label import MDLabel
-from kivymd.uix.button import MDFlatButton, MDRectangleFlatButton, MDIconButton
-from kivymd.uix.widget import MDWidget
-from kivymd.uix.scrollview import MDScrollView
-from kivymd.uix.imagelist.imagelist import MDSmartTile
-from kivy.lang import Builder
-from kivy.uix.popup import Popup
-from bleak import BleakClient, discover
-from kivymd.uix.screenmanager import MDScreenManager
-from kivymd.uix.list import MDList, OneLineListItem
-from kivymd.uix.spinner import MDSpinner
-#from kivy.uix.screenmanager import MDScreen
-from kivy.animation import Animation
-from kivymd.app import MDApp
-from threading import Thread
-from datetime import datetime
-import os
+import os 
 import sys
 import bluetooth
 import serial 
-import json
 import bcrypt
+
+if platform == 'android':
+    import jnius
+    from jnius import autoclass
+    from android import activity
+    from android.broadcast import BroadcastReceiver
+
+    Intent = autoclass('android.content.Intent')
+    IntentFilter = autoclass('android.content.IntentFilter')
+    BluetoothAdapter = autoclass('android.bluetooth.BluetoothAdapter')
+
+# Variables de entorno
+# os.environ['JAVA_HOME'] = 'C:\\Program Files\\Java\\jdk-22'
+# os.environ['JDK_HOME'] = 'C:\\Program Files\\Java\\jdk-22'
+# os.environ['PATH'] += ';C:\\Program Files\\Java\\jdk-22\\bin;C:\\Program Files\\Java\\jdk-22\\bin\\server'
 
 if hasattr(sys, '_MEIPASS'):
     os.environ['KIVY_NO_CONSOLELOG'] = '1'
 
-database = Database()
+#Biblotecas
+from daatabase1 import Database
+from kivy.core.window import Window
+from kivy.utils import platform
+from kivy.properties import StringProperty
+from kivy.clock import Clock
+from kivy.lang import Builder
+from kivy.uix.boxlayout import BoxLayout
 
+from kivymd.uix.card import MDCard
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.screen import MDScreen
+from kivymd.uix.screenmanager import MDScreenManager
+from kivymd.uix.list import MDList, OneLineListItem
+from kivymd.uix.spinner import MDSpinner
+from kivymd.app import MDApp
+from android.permissions import request_permissions, Permission 
+request_permissions([Permission.BLUETOOTH_CONNECT,Permission.BLUETOOTH_SCAN ])
+
+from threading import Thread
+from jnius import autoclass
+
+database = Database()
 
 def validate_empty(*args):
     errors = False
@@ -64,10 +59,10 @@ def validate_empty(*args):
 
 class LoginScreen(MDScreen):
     def login(self):
-        username = self.ids.user.text.strip()
-        password = self.ids.password.text.strip()
+        username = self.ids.user
+        password = self.ids.password
 
-        empty = validate_empty(self.ids.user, self.ids.password)
+        empty = validate_empty(username, password)
 
         if empty:
             self.ids.messages.text = "Todos los campos son requeridos"
@@ -78,20 +73,12 @@ class LoginScreen(MDScreen):
         if not res['status']:
             self.ids.messages.text = "Usuario inválido o no registrado"
         else:
-            stored_password_hash = res['data']['contraseña'].strip()
-            print("Password length:", len(password))
-            print("Stored hash length:", len(stored_password_hash))
-            print("Password:", repr(password))
-            print("Stored hash:", repr(stored_password_hash))
-
-            # Comparar la contraseña proporcionada con el hash almacenado
-            if not database.verify_password(password, stored_password_hash):
-                print("Hash comparison failed")
+            stored_password = res['data'][2]
+            if not bcrypt.checkpw(password.text.encode('utf-8'), stored_password):
                 self.ids.messages.text = "Contraseña incorrecta"
-                self.ids.password.error = True
+                password.error = True
                 return
 
-            print("Hash comparison succeeded")
             self.manager.transition.direction = 'left'
             self.manager.current = 'app_screen'
 
@@ -100,7 +87,6 @@ class LoginScreen(MDScreen):
         self.manager.current = 'new_account_screen'
 
 class NewAccountScreen(MDScreen):
-
     def new_account(self):
         new_username = self.ids.new_user
         new_password = self.ids.new_user_password
@@ -119,10 +105,8 @@ class NewAccountScreen(MDScreen):
             Clock.schedule_once(lambda dt: self.clean(), 2)
             return
 
-        # Hash de la nueva contraseña antes de guardarla
-        password_hash = bcrypt.hashpw(new_password.text.encode(), bcrypt.gensalt())
-
-        database.create_user(new_username.text, password_hash.decode())
+        hashed_password = bcrypt.hashpw(new_password.text.encode('utf-8'), bcrypt.gensalt())
+        database.create_user(new_username.text, hashed_password)
 
         self.ids.messages.theme_text_color = "Custom"
         self.ids.messages.text_color = "green"
@@ -166,7 +150,6 @@ class AppScreen(MDScreen):
     #     with open("sensor_data.txt", "a") as file:
     #         file.write(f"{data}\n")
 
-
     def log_out(self):
         self.manager.transition.direction = 'right'
         self.manager.current = "login_screen"
@@ -185,7 +168,6 @@ class HistoryScreen(MDScreen):
         self.manager.transition.direction = 'right'
         self.manager.current = "app_screen"
     
-
 class BottomPanel(BoxLayout):
     def show_app_screen(self):
         self.manager.transition.direction = 'right'
@@ -280,8 +262,27 @@ class MainApp(MDApp):
     
     def on_start(self):
         self.connect_serial_port()
+        self.request_permissions()
         #self.list_paired_devices()
         #self.connect_bluetooth()
+
+    def request_permissions(self):
+        if platform == 'android':
+            PythonActivity = autoclass('org.kivy.android.PythonActivity')
+            currentActivity = PythonActivity.mActivity
+            ContextCompat = autoclass('androidx.core.content.ContextCompat')
+            ActivityCompat = autoclass('androidx.core.app.ActivityCompat')
+            Manifest = autoclass('android.Manifest')
+            permissions = [
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH_SCAN,
+                Manifest.permission.NEARBY_DEVICES
+            ]
+            for permission in permissions:
+                if ContextCompat.checkSelfPermission(currentActivity, permission) != 0:
+                    ActivityCompat.requestPermissions(currentActivity, permissions, 1)
 
     def connect_serial_port(self):
         try:
